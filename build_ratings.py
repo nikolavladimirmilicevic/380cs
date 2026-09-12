@@ -26,7 +26,7 @@ import csv, io, json, math, os, sys, urllib.request
 
 ARCHIVE = "https://raw.githubusercontent.com/vaastav/Fantasy-Premier-League/master/data"
 SEASONS = ["2016-17","2017-18","2018-19","2019-20","2020-21",
-           "2021-22","2022-23","2023-24","2024-25","2025-26"]
+           "2021-22","2022-23","2023-24","2024-25","2025-26","2026-27"]
 POS = {1:"GK", 2:"DEF", 3:"MID", 4:"FWD"}
 
 # ---- reliability & mapping knobs -------------------------------------------
@@ -175,8 +175,11 @@ def main():
     rows = []
     for s in past:
         sys.stderr.write(f"loading {s} (archive) ... ")
-        rs = load_fpl_season(s); rows += rs
-        sys.stderr.write(f"{len(rs)} players\n")
+        try:
+            rs = load_fpl_season(s); rows += rs
+            sys.stderr.write(f"{len(rs)} players\n")
+        except Exception as e:
+            sys.stderr.write(f"skip ({e})\n")
 
     if mode == "prod":
         sys.stderr.write(f"loading {current} (live FPL API) ... ")
