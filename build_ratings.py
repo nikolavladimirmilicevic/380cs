@@ -29,6 +29,22 @@ SEASONS = ["2016-17","2017-18","2018-19","2019-20","2020-21",
            "2021-22","2022-23","2023-24","2024-25","2025-26","2026-27"]
 POS = {1:"GK", 2:"DEF", 3:"MID", 4:"FWD"}
 
+# Same club is spelled differently across sources (live FPL uses "Ipswich Town",
+# the archive uses "Ipswich"), which would split a club's seasons. Fold known
+# variants to one label. Explicit map only, so nothing merges by accident.
+CANON = {
+    "Hull City":"Hull", "Ipswich Town":"Ipswich", "Coventry City":"Coventry",
+    "Cardiff City":"Cardiff", "Swansea City":"Swansea", "Stoke City":"Stoke",
+    "Norwich City":"Norwich", "Leicester City":"Leicester", "Birmingham City":"Birmingham",
+    "Luton Town":"Luton", "Leeds United":"Leeds", "Sheffield United":"Sheffield Utd",
+    "West Ham United":"West Ham", "Newcastle United":"Newcastle",
+    "Nottingham Forest":"Nott'm Forest", "Tottenham Hotspur":"Spurs",
+    "Wolverhampton Wanderers":"Wolves", "Brighton & Hove Albion":"Brighton",
+    "West Bromwich Albion":"West Brom", "Manchester City":"Man City",
+    "Manchester United":"Man Utd", "Queens Park Rangers":"QPR",
+}
+def canon(name): return CANON.get(name, name)
+
 # ---- reliability & mapping knobs -------------------------------------------
 REL_K   = 6.0     # per-90 shrinkage: 90*K minutes ~ half trust
 VOL_W   = 0.35    # weight of playing-time relative to per-90 performance
@@ -158,7 +174,7 @@ def rate_all(rows):
     out = []
     for r in rows:
         out.append({
-            "player": r["player"], "club": r["club"], "season": r["season"],
+            "player": r["player"], "club": canon(r["club"]), "season": r["season"],
             "position": r["pos"], "seasonRating": r["seasonRating"],
             "primeRating": prime[r["code"]],
         })
