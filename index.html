@@ -65,9 +65,6 @@
   .seasonbox .opt:hover{background:#16261f}
   .seasonbox input{accent-color:var(--accent);width:15px;height:15px;margin:0}
   .seasonbox .empty{color:var(--muted-2);font-size:13px;padding:8px}
-  .season-actions{display:flex;gap:10px;margin-top:6px}
-  .season-actions button{width:auto;flex:1;padding:6px;font-size:11.5px;color:var(--muted);cursor:pointer;font-weight:700}
-  .season-actions button:hover{color:var(--ink);border-color:var(--muted-2)}
 
   /* results */
   .cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
@@ -155,12 +152,8 @@
       <select id="team"></select>
     </div>
     <div class="field">
-      <label>Sezone</label>
+      <label>Sezona</label>
       <div class="seasonbox" id="seasonbox"><div class="empty">Prvo izaberi tim.</div></div>
-      <div class="season-actions">
-        <button id="selAll" type="button">Sve</button>
-        <button id="selNone" type="button">Nijedna</button>
-      </div>
     </div>
     <div class="field">
       <label for="pos">Pozicija</label>
@@ -171,11 +164,11 @@
   <div class="cols">
     <div class="col">
       <h2>Rejting u sezoni <span class="tag" id="cnt1">0</span></h2>
-      <div id="list1"><div class="empty-state">Izaberi tim i bar jednu sezonu.</div></div>
+      <div id="list1"><div class="empty-state">Izaberi tim i sezonu.</div></div>
     </div>
     <div class="col">
       <h2>Rejting u prajmu <span class="tag" id="cnt2">0</span></h2>
-      <div id="list2"><div class="empty-state">Izaberi tim i bar jednu sezonu.</div></div>
+      <div id="list2"><div class="empty-state">Izaberi tim i sezonu.</div></div>
     </div>
   </div>
   <p class="barhint" id="samplehint"></p>
@@ -375,7 +368,7 @@
     if(!seasons.length){seasonBox.innerHTML='<div class="empty">Nema sezona.</div>';return;}
     seasons.forEach(function(s,i){
       var lab=document.createElement("label");lab.className="opt";
-      var cb=document.createElement("input");cb.type="checkbox";cb.value=s;cb.checked=(i===0);
+      var cb=document.createElement("input");cb.type="radio";cb.name="season";cb.value=s;cb.checked=(i===0);
       cb.addEventListener("change",render);
       lab.appendChild(cb);var sp=document.createElement("span");sp.textContent=s;lab.appendChild(sp);
       seasonBox.appendChild(lab);
@@ -411,7 +404,7 @@
   function render(){
     var t=currentTeam(), seasons=selectedSeasons(), pos=posSel.value;
     if(!t||!seasons.length){
-      var msg='<div class="empty-state">Izaberi tim i bar jednu sezonu.</div>';
+      var msg='<div class="empty-state">Izaberi tim i sezonu.</div>';
       list1.innerHTML=msg;list2.innerHTML=msg;cnt1.textContent="0";cnt2.textContent="0";return;
     }
     var pool=DATA.filter(function(d){
@@ -507,8 +500,6 @@
     store.set(KEY,"");applyData(SAMPLE.slice(),true);setMsg("Vraćen demo set.","ok");
   });
 
-  $("selAll").addEventListener("click",function(){seasonBox.querySelectorAll("input").forEach(function(c){c.checked=true;});render();});
-  $("selNone").addEventListener("click",function(){seasonBox.querySelectorAll("input").forEach(function(c){c.checked=false;});render();});
   teamSel.addEventListener("change",function(){buildSeasons();buildPositions();render();});
   posSel.addEventListener("change",render);
 
@@ -516,7 +507,7 @@
   (async function(){
     // 1) fresh from the data source (refreshed by the CI pipeline)
     try{
-      var resp=await fetch(DATA_URL,{cache:"no-store"});
+      var resp=await fetch(DATA_URL+(DATA_URL.indexOf("?")<0?"?":"&")+"v="+Date.now(),{cache:"no-store"});
       if(resp.ok){ var rows=autoParse(await resp.text()); if(rows&&rows.length){ applyData(rows,false); return; } }
     }catch(e){}
     // 2) last set saved in this browser
