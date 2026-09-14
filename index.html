@@ -1,461 +1,135 @@
 <!DOCTYPE html>
-<html lang="sr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>38-0 Cheat Sheet</title>
 <style>
   :root{
-    --bg:#0a1310; --panel:#101d18; --panel-2:#0d1712; --line:#20342b;
-    --ink:#e9f1ec; --muted:#8ba597; --muted-2:#5f776b;
-    --chalk:#f2f5f0;
-    --t-elite:#f3c34a; --t-high:#63c583; --t-good:#5ba7c4; --t-mid:#9fb2a8; --t-low:#6c8074;
-    --accent:#37e59a;
+    --bg:#0a1310;--panel:#101d18;--panel2:#0d1712;--line:#20342b;
+    --ink:#e9f1ec;--muted:#8ba597;--muted2:#5f776b;--accent:#37e59a;
   }
   *{box-sizing:border-box}
-  html,body{margin:0}
-  body{
-    background:
-      radial-gradient(1200px 500px at 50% -10%, #123024 0%, transparent 60%),
-      var(--bg);
-    color:var(--ink);
-    font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
-    -webkit-font-smoothing:antialiased;
-    min-height:100vh;
-    padding:20px clamp(12px,4vw,40px) 60px;
-  }
-  .wrap{max-width:1120px;margin:0 auto}
-  .cond{font-family:'Arial Narrow','Segoe UI',sans-serif;font-stretch:condensed}
+  body{margin:0;background:radial-gradient(1200px 500px at 50% -10%,#123024 0%,transparent 60%),var(--bg);
+    color:var(--ink);font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;min-height:100vh;padding:20px clamp(12px,4vw,40px) 60px}
+  .wrap{max-width:1080px;margin:0 auto}
+  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+  .logo{font-weight:800;letter-spacing:-.5px;font-size:26px;display:flex;align-items:center;gap:9px}
+  .logo .score{background:var(--accent);color:#062018;padding:1px 8px;border-radius:5px;font-variant-numeric:tabular-nums}
+  .logo .sub{color:var(--muted);font-weight:600;font-size:14px}
+  .lede{color:var(--muted);font-size:13.5px;margin:2px 0 20px;max-width:680px;line-height:1.5}
 
-  header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
-  .logo{
-    font-weight:800;letter-spacing:-.5px;font-size:26px;
-    display:flex;align-items:center;gap:9px;
-  }
-  .logo .score{
-    background:var(--accent);color:#062018;padding:1px 8px;border-radius:5px;
-    font-variant-numeric:tabular-nums;
-  }
-  .logo .sub{color:var(--muted);font-weight:600;font-size:14px;letter-spacing:0}
-  .lede{color:var(--muted);font-size:13.5px;margin:2px 0 20px;max-width:640px;line-height:1.5}
-
-  /* controls */
-  .controls{
-    display:grid;grid-template-columns:1.3fr 1.6fr 1fr;gap:14px;
-    background:var(--panel);border:1px solid var(--line);border-radius:14px;
-    padding:16px;margin-bottom:18px;
-  }
-  @media(max-width:760px){.controls{grid-template-columns:1fr}}
-  .field label{
-    display:block;font-size:11px;letter-spacing:.4px;color:var(--muted);
-    margin-bottom:6px;font-weight:700;
-  }
-  select,button,.seasonbox{
-    width:100%;background:var(--panel-2);color:var(--ink);
-    border:1px solid var(--line);border-radius:9px;padding:10px 11px;
-    font-size:14px;font-family:inherit;
-  }
-  select:focus,button:focus,.seasonbox:focus-within{outline:2px solid var(--accent);outline-offset:1px}
-  select{appearance:none;cursor:pointer;
+  .controls{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:18px}
+  .toprow{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
+  @media(max-width:640px){.toprow{grid-template-columns:1fr}}
+  label{display:block;font-size:11px;letter-spacing:.4px;color:var(--muted);margin-bottom:6px;font-weight:700}
+  select{width:100%;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:9px;
+    padding:10px 34px 10px 11px;font-size:14px;font-family:inherit;appearance:none;cursor:pointer;
     background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
-    background-position:calc(100% - 18px) 18px,calc(100% - 13px) 18px;
-    background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:34px;}
-  .seasonbox{max-height:112px;overflow:auto;padding:6px}
-  .seasonbox .opt{display:flex;align-items:center;gap:8px;padding:6px 7px;border-radius:6px;cursor:pointer;font-size:13.5px}
-  .seasonbox .opt:hover{background:#16261f}
-  .seasonbox input{accent-color:var(--accent);width:15px;height:15px;margin:0}
-  .seasonbox .empty{color:var(--muted-2);font-size:13px;padding:8px}
+    background-position:calc(100% - 18px) 18px,calc(100% - 13px) 18px;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+  select:focus{outline:2px solid var(--accent);outline-offset:1px}
+  .seasonwrap{margin-top:14px}
+  .seasons{display:flex;flex-wrap:wrap;gap:6px}
+  .seasons .s{font-size:12.5px;padding:5px 10px;border-radius:20px;border:1px solid var(--line);
+    background:var(--panel2);color:var(--muted);cursor:pointer;font-variant-numeric:tabular-nums}
+  .seasons .s:hover:not(.on){border-color:var(--muted2);color:var(--ink)}
+  .seasons .s.on{background:var(--accent);color:#062018;border-color:var(--accent);font-weight:700}
+  .seasons .empty{color:var(--muted2);font-size:13px}
 
-  /* results */
-  .cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-  @media(max-width:760px){.cols{grid-template-columns:1fr}}
-  .col h2{
-    font-size:13px;letter-spacing:.3px;margin:0 0 10px;color:var(--chalk);
-    display:flex;align-items:center;gap:9px;font-weight:700;
-  }
-  .col h2 .tag{font-size:10.5px;color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:2px 9px;font-weight:700}
-
-  .row{
-    display:grid;grid-template-columns:26px 1fr auto;align-items:center;gap:12px;
-    background:var(--panel);border:1px solid var(--line);border-radius:10px;
-    padding:9px 12px;margin-bottom:7px;
-  }
-  .row .rank{color:var(--muted-2);font-size:13px;font-variant-numeric:tabular-nums;text-align:right;font-weight:700}
-  .row .who{min-width:0}
-  .row .name{font-weight:650;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .row .meta{color:var(--muted);font-size:11.5px;margin-top:1px;display:flex;gap:7px;flex-wrap:wrap}
-  .row .meta .pos{color:var(--accent);font-weight:700}
-  .rating{
-    font-weight:800;font-size:24px;line-height:1;font-variant-numeric:tabular-nums;
-    min-width:44px;text-align:center;padding:6px 4px;border-radius:8px;
-    background:#0c1611;border:1px solid var(--line);
-  }
-  .t-elite .rating{color:var(--t-elite);border-color:#4a3d14;background:#161206}
-  .t-high  .rating{color:var(--t-high); border-color:#1d4230;background:#0a1a12}
-  .t-good  .rating{color:var(--t-good); border-color:#1c3946;background:#081720}
-  .t-mid   .rating{color:var(--t-mid)}
-  .t-low   .rating{color:var(--t-low)}
+  .tablewrap{overflow-x:auto}
+  table{width:100%;border-collapse:separate;border-spacing:0 6px;min-width:460px}
+  thead th{text-align:left;font-size:11px;letter-spacing:.4px;color:var(--muted);font-weight:700;padding:0 12px 8px;white-space:nowrap}
+  thead th.num{text-align:center}
+  thead th.sortable{cursor:pointer;user-select:none}
+  thead th.sortable:hover{color:var(--ink)}
+  thead th.active{color:var(--accent)}
+  tbody td{background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:9px 12px;font-size:14px}
+  tbody td:first-child{border-left:1px solid var(--line);border-radius:10px 0 0 10px;color:var(--muted2);
+    font-variant-numeric:tabular-nums;text-align:right;width:34px;font-weight:700}
+  tbody td:last-child{border-right:1px solid var(--line);border-radius:0 10px 10px 0}
+  td.player{font-weight:650}
+  td.pos{color:var(--accent);font-weight:700;font-size:12.5px}
+  td.num{text-align:center;width:64px}
+  .r{font-weight:800;font-variant-numeric:tabular-nums;border-radius:7px;padding:5px 0;display:inline-block;
+    min-width:42px;border:1px solid var(--line);background:#0c1611;font-size:15px}
+  .t90{color:#f3c34a;border-color:#4a3d14;background:#161206}
+  .t80{color:#63c583;border-color:#1d4230;background:#0a1a12}
+  .t70{color:#5ba7c4;border-color:#1c3946;background:#081720}
+  .t60{color:#9fb2a8}
+  .t0{color:#6c8074}
   .empty-state{color:var(--muted);font-size:13.5px;background:var(--panel);border:1px dashed var(--line);border-radius:10px;padding:22px;text-align:center}
+  .count{color:var(--muted);font-size:12px;margin:0 0 10px}
 
-  .barhint{font-size:11.5px;color:var(--muted-2);margin:14px 0 0}
-
-  /* data panel */
-  details.data{margin-top:26px;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-  details.data>summary{
-    cursor:pointer;padding:13px 16px;font-weight:700;font-size:13.5px;color:var(--ink);
-    list-style:none;display:flex;align-items:center;justify-content:space-between;
-  }
+  details.data{margin-top:26px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  details.data>summary{cursor:pointer;padding:13px 16px;font-weight:700;font-size:13.5px;color:var(--ink);
+    list-style:none;display:flex;align-items:center;justify-content:space-between}
   details.data>summary::-webkit-details-marker{display:none}
   details.data>summary .status{font-size:12px;color:var(--muted);font-weight:600}
-  .data-body{padding:0 16px 18px;border-top:1px solid var(--line)}
-  .data-body p{color:var(--muted);font-size:13px;line-height:1.55}
-  .data-body ol{color:var(--muted);font-size:13px;line-height:1.6;padding-left:20px}
+  .data-body{padding:14px 16px 18px;border-top:1px solid var(--line)}
+  .data-body p{color:var(--muted);font-size:13px;line-height:1.55;margin:0 0 8px}
   .data-body code{background:#0a1712;border:1px solid var(--line);border-radius:4px;padding:1px 5px;color:var(--accent);font-size:12px}
-  textarea{
-    width:100%;min-height:120px;background:#0a1712;border:1px solid var(--line);
-    border-radius:9px;color:var(--ink);font-family:ui-monospace,Menlo,Consolas,monospace;
-    font-size:12px;padding:11px;resize:vertical;margin-top:6px;
-  }
+  textarea{width:100%;min-height:110px;background:#0a1712;border:1px solid var(--line);border-radius:9px;color:var(--ink);
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;padding:11px;resize:vertical;margin-top:6px}
+  input[type=url]{width:100%;background:#0a1712;border:1px solid var(--line);border-radius:9px;color:var(--ink);padding:10px 11px;font-size:13px;margin-top:8px;font-family:inherit}
   .data-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center}
-  .data-actions button{width:auto;cursor:pointer;font-weight:700;padding:9px 16px}
+  .data-actions button,.filelabel{width:auto;cursor:pointer;font-weight:700;padding:9px 16px;font-size:14px;border-radius:9px;
+    border:1px solid var(--line);background:var(--panel2);color:var(--ink);font-family:inherit}
   .btn-primary{background:var(--accent);border-color:var(--accent);color:#062018}
   .btn-primary:hover{filter:brightness(1.08)}
-  .btn-ghost:hover{border-color:var(--muted-2)}
-  .msg{font-size:12.5px;margin-top:10px;min-height:16px}
-  .msg.err{color:#ff9a8a}
-  .msg.ok{color:var(--accent)}
-  .filelabel{cursor:pointer;font-size:13px;color:var(--muted);border:1px solid var(--line);border-radius:9px;padding:9px 14px;background:var(--panel-2)}
-  .filelabel:hover{border-color:var(--muted-2);color:var(--ink)}
+  .btn-ghost:hover,.filelabel:hover{border-color:var(--muted2)}
   input[type=file]{display:none}
-  input[type=url]{width:100%;background:#0a1712;border:1px solid var(--line);border-radius:9px;color:var(--ink);padding:10px 11px;font-size:13px;margin-top:6px;font-family:inherit}
-
-  /* mapping */
-  .mapping{display:none;margin-top:14px;padding:14px;background:#0a1712;border:1px solid var(--line);border-radius:10px}
-  .mapping.show{display:block}
-  .mapping h4{margin:0 0 4px;font-size:13px}
-  .mapping p{margin:0 0 10px}
-  .maprow{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center;margin-bottom:8px}
-  .maprow span{font-size:12.5px;color:var(--muted)}
-  .maprow select{padding:8px 30px 8px 10px}
+  .msg{font-size:12.5px;margin-top:10px;min-height:16px}
+  .msg.err{color:#ff9a8a}.msg.ok{color:var(--accent)}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div class="logo"><span class="score">38-0</span> Cheat Sheet <span class="sub">draft board</span></div>
-  </header>
-  <p class="lede">Izaberi tim i sezonu koju ti je bacio točak. Dobijaš dve rang-liste igrača iz tog sastava: po rejtingu u toj sezoni i po rejtingu u prajmu. Najjači izbor je na vrhu.</p>
+  <header><div class="logo"><span class="score">38-0</span> Cheat Sheet <span class="sub">draft board</span></div></header>
+  <p class="lede">Pick a team and the season the wheel gave you. You get the squad in one grid with two ratings per player: their rating that season, and their prime (their highest rating anywhere in the database). Click a rating header to sort by it.</p>
 
   <div class="controls">
-    <div class="field">
-      <label for="team">Tim</label>
-      <select id="team"></select>
+    <div class="toprow">
+      <div><label for="team">Team</label><select id="team"></select></div>
+      <div><label for="pos">Position</label><select id="pos"><option value="">All positions</option></select></div>
     </div>
-    <div class="field">
-      <label>Sezona</label>
-      <div class="seasonbox" id="seasonbox"><div class="empty">Prvo izaberi tim.</div></div>
-    </div>
-    <div class="field">
-      <label for="pos">Pozicija</label>
-      <select id="pos"><option value="">Sve pozicije</option></select>
+    <div class="seasonwrap">
+      <label>Season</label>
+      <div class="seasons" id="seasons"><span class="empty">Pick a team first.</span></div>
     </div>
   </div>
 
-  <div class="cols">
-    <div class="col">
-      <h2>Rejting u sezoni <span class="tag" id="cnt1">0</span></h2>
-      <div id="list1"><div class="empty-state">Izaberi tim i sezonu.</div></div>
-    </div>
-    <div class="col">
-      <h2>Rejting u prajmu <span class="tag" id="cnt2">0</span></h2>
-      <div id="list2"><div class="empty-state">Izaberi tim i sezonu.</div></div>
-    </div>
-  </div>
-  <p class="barhint" id="samplehint"></p>
+  <p class="count" id="count"></p>
+  <div class="tablewrap"><div id="grid"><div class="empty-state">Pick a team and a season.</div></div></div>
 
   <details class="data">
-    <summary>Podaci <span class="status" id="dstatus"></span></summary>
+    <summary>Data <span class="status" id="dstatus"></span></summary>
     <div class="data-body">
-      <p style="margin-top:14px">Aplikacija radi sa bilo kojim skupom podataka gde svaki red ima igrača, klub, sezonu i rejting. Trenutno je učitan mali <b>demo set</b> da vidiš kako izgleda. Da ubaciš prave 38-0 podatke:</p>
-      <ol>
-        <li>Otvori <code>38-0.app/game</code> u pregledaču pa <code>F12</code> → tab <b>Network</b>.</li>
-        <li>Zavrti/odigraj potez i nađi zahtev koji vraća JSON sa igračima i rejtinzima (obično <code>.json</code> ili XHR/fetch).</li>
-        <li>Desni klik na taj zahtev → <b>Copy → Copy response</b>, pa nalepi ispod i klikni <b>Učitaj</b>.</li>
-      </ol>
-      <p>Ako se kolone ne poklope automatski, pojaviće se mapiranje gde ručno kažeš koja kolona je šta. Podaci ostaju sačuvani u pregledaču za sledeći put.</p>
-
-      <textarea id="pasteBox" placeholder='Nalepi JSON ovde. Npr:&#10;[{"player":"Thierry Henry","club":"Arsenal","season":"2003-04","position":"FW","rating":96,"prime":96}, ...]'></textarea>
-      <input type="url" id="urlBox" placeholder="ili URL do JSON fajla: https://.../players.json">
-
+      <p>The app reads <code>380db.txt</code> from the repo automatically. You can also load a dataset by hand here: paste the raw 38-0 scrape or a JSON array, open a file, or give a URL.</p>
+      <textarea id="pasteBox" placeholder="Paste the raw 38-0 scrape text, or a JSON array of players..."></textarea>
+      <input type="url" id="urlBox" placeholder="or a URL to a .txt / .json file">
       <div class="data-actions">
-        <button class="btn-primary" id="loadBtn" type="button">Učitaj</button>
-        <label class="filelabel" for="fileInput">Otvori .json / .csv fajl</label>
-        <input type="file" id="fileInput" accept=".json,.csv,.txt,application/json,text/csv">
-        <button class="btn-ghost" id="resetBtn" type="button">Vrati demo</button>
+        <button class="btn-primary" id="loadBtn" type="button">Load</button>
+        <label class="filelabel" for="fileInput">Open file</label>
+        <input type="file" id="fileInput" accept=".txt,.json,.csv,application/json,text/plain">
+        <button class="btn-ghost" id="resetBtn" type="button">Reset to demo</button>
       </div>
       <div class="msg" id="msg"></div>
-
-      <div class="mapping" id="mapping">
-        <h4>Mapiranje kolona</h4>
-        <p>Nisam prepoznao sva polja. Poveži ih ručno pa klikni Primeni.</p>
-        <div class="maprow"><span>Igrač *</span><select data-k="player"></select></div>
-        <div class="maprow"><span>Klub *</span><select data-k="club"></select></div>
-        <div class="maprow"><span>Sezona *</span><select data-k="season"></select></div>
-        <div class="maprow"><span>Rejting u sezoni *</span><select data-k="seasonRating"></select></div>
-        <div class="maprow"><span>Rejting u prajmu</span><select data-k="primeRating"></select></div>
-        <div class="maprow"><span>Pozicija</span><select data-k="position"></select></div>
-        <div class="data-actions"><button class="btn-primary" id="applyMap" type="button">Primeni</button></div>
-      </div>
     </div>
   </details>
 </div>
-
 <script>
 (function(){
   "use strict";
-
-  /* ---------- storage: window.storage -> localStorage -> memory ---------- */
-  var mem = {};
-  var store = {
-    get: async function(k){
-      try{ if(window.storage&&window.storage.get){ var r=await window.storage.get(k); return r?r.value:null; } }catch(e){}
-      try{ return localStorage.getItem(k); }catch(e){}
-      return (k in mem)?mem[k]:null;
-    },
-    set: async function(k,v){
-      try{ if(window.storage&&window.storage.set){ await window.storage.set(k,v); return; } }catch(e){}
-      try{ localStorage.setItem(k,v); return; }catch(e){}
-      mem[k]=v;
-    }
+  var mem={};
+  var store={
+    get:async function(k){try{if(window.storage&&window.storage.get){var r=await window.storage.get(k);return r?r.value:null;}}catch(e){}try{return localStorage.getItem(k);}catch(e){}return (k in mem)?mem[k]:null;},
+    set:async function(k,v){try{if(window.storage&&window.storage.set){await window.storage.set(k,v);return;}}catch(e){}try{localStorage.setItem(k,v);return;}catch(e){}mem[k]=v;}
   };
-  var KEY="thirtyeight_dataset_v1";
-  // The app reads the raw 38-0 scrape directly and parses it in the browser, so
-  // updating 380db.txt in the repo puts the new data in the app automatically.
+  var KEY="thirtyeight_dataset_v2";
   var DATA_URL="./380db.txt";
 
-  /* ---------- field detection ---------- */
-  var ALIASES={
-    player:["player","name","playername","player_name","fullname","full_name","playerfullname"],
-    club:["club","team","teamname","team_name","club_name","clubname","squad"],
-    season:["season","year","seasonname","campaign","seasonlabel","season_label","yr"],
-    seasonRating:["seasonrating","season_rating","rating","ovr","overall","rat","seasonovr","score","seasonscore","seasonrat"],
-    primeRating:["primerating","prime_rating","prime","peak","peakrating","peak_rating","primeovr","primescore","careerpeak"],
-    position:["position","pos","role","positions"]
-  };
-  var norm=function(s){return String(s).toLowerCase().replace(/[^a-z0-9]/g,"");};
-
-  function findArray(data){
-    if(Array.isArray(data)) return data;
-    if(data&&typeof data==="object"){
-      // deepest-first: try direct array values, then nested
-      var keys=Object.keys(data);
-      for(var i=0;i<keys.length;i++){ if(Array.isArray(data[keys[i]])&&data[keys[i]].length&&typeof data[keys[i]][0]==="object") return data[keys[i]]; }
-      for(var j=0;j<keys.length;j++){ var found=findArray(data[keys[j]]); if(found) return found; }
-    }
-    return null;
-  }
-
-  function parseCSV(text){
-    var lines=text.replace(/\r/g,"").split("\n").filter(function(l){return l.trim().length;});
-    if(!lines.length) return [];
-    var split=function(l){
-      var out=[],cur="",q=false;
-      for(var i=0;i<l.length;i++){var c=l[i];
-        if(c==='"'){ if(q&&l[i+1]==='"'){cur+='"';i++;} else q=!q; }
-        else if(c===","&&!q){out.push(cur);cur="";}
-        else cur+=c;
-      } out.push(cur); return out;
-    };
-    var head=split(lines[0]).map(function(h){return h.trim();});
-    return lines.slice(1).map(function(l){
-      var cells=split(l),o={};
-      head.forEach(function(h,i){o[h]=cells[i]!==undefined?cells[i].trim():"";});
-      return o;
-    });
-  }
-
-  function detectMap(rows){
-    var keys=Object.keys(rows[0]||{});
-    var map={};
-    Object.keys(ALIASES).forEach(function(field){
-      var hit=null;
-      for(var k=0;k<keys.length;k++){
-        if(ALIASES[field].indexOf(norm(keys[k]))>-1){hit=keys[k];break;}
-      }
-      map[field]=hit;
-    });
-    return {map:map,keys:keys};
-  }
-
-  var REQUIRED=["player","club","season","seasonRating"];
-
-  function normalize(rows,map){
-    var out=[];
-    for(var i=0;i<rows.length;i++){
-      var r=rows[i];
-      var sr=parseFloat(r[map.seasonRating]);
-      if(isNaN(sr)) continue;
-      var pr=map.primeRating?parseFloat(r[map.primeRating]):NaN;
-      out.push({
-        player:String(r[map.player]!=null?r[map.player]:"").trim(),
-        club:String(r[map.club]!=null?r[map.club]:"").trim(),
-        season:String(r[map.season]!=null?r[map.season]:"").trim(),
-        position:map.position&&r[map.position]!=null?String(r[map.position]).trim():"",
-        seasonRating:sr,
-        primeRating:isNaN(pr)?sr:pr,
-        primeMissing:isNaN(pr)
-      });
-    }
-    return out.filter(function(x){return x.player&&x.club&&x.season;});
-  }
-
-  /* ---------- sample data ---------- */
-  var SAMPLE=[
-    ["Thierry Henry","Arsenal","2003-04","FW",96,96],["Patrick Vieira","Arsenal","2003-04","CM",90,91],
-    ["Dennis Bergkamp","Arsenal","2003-04","AM",88,92],["Robert Pires","Arsenal","2003-04","LM",89,89],
-    ["Freddie Ljungberg","Arsenal","2003-04","RM",85,86],["Sol Campbell","Arsenal","2003-04","CB",87,88],
-    ["Ashley Cole","Arsenal","2003-04","LB",85,89],["Kolo Toure","Arsenal","2003-04","CB",83,86],
-    ["Lauren","Arsenal","2003-04","RB",82,83],["Gilberto Silva","Arsenal","2003-04","DM",83,84],
-    ["Jens Lehmann","Arsenal","2003-04","GK",84,85],
-    ["Cristiano Ronaldo","Manchester United","2007-08","RW",94,98],["Wayne Rooney","Manchester United","2007-08","FW",88,90],
-    ["Carlos Tevez","Manchester United","2007-08","FW",85,87],["Rio Ferdinand","Manchester United","2007-08","CB",88,89],
-    ["Nemanja Vidic","Manchester United","2007-08","CB",88,89],["Paul Scholes","Manchester United","2007-08","CM",86,90],
-    ["Ryan Giggs","Manchester United","2007-08","LM",85,91],["Michael Carrick","Manchester United","2007-08","CM",83,85],
-    ["Patrice Evra","Manchester United","2007-08","LB",84,87],["Owen Hargreaves","Manchester United","2007-08","DM",82,85],
-    ["Edwin van der Sar","Manchester United","2007-08","GK",87,89],
-    ["Kevin De Bruyne","Manchester City","2017-18","CM",93,94],["David Silva","Manchester City","2017-18","AM",89,91],
-    ["Sergio Aguero","Manchester City","2017-18","FW",90,92],["Raheem Sterling","Manchester City","2017-18","RW",86,89],
-    ["Leroy Sane","Manchester City","2017-18","LW",85,87],["Vincent Kompany","Manchester City","2017-18","CB",85,89],
-    ["Fernandinho","Manchester City","2017-18","DM",85,86],["Kyle Walker","Manchester City","2017-18","RB",85,86],
-    ["Ilkay Gundogan","Manchester City","2017-18","CM",84,86],["Nicolas Otamendi","Manchester City","2017-18","CB",82,83],
-    ["Ederson","Manchester City","2017-18","GK",86,88],
-    ["Frank Lampard","Chelsea","2004-05","CM",90,92],["John Terry","Chelsea","2004-05","CB",88,90],
-    ["Didier Drogba","Chelsea","2004-05","FW",85,90],["Arjen Robben","Chelsea","2004-05","RW",86,91],
-    ["Claude Makelele","Chelsea","2004-05","DM",86,87],["Petr Cech","Chelsea","2004-05","GK",88,90],
-    ["Ricardo Carvalho","Chelsea","2004-05","CB",85,87],["William Gallas","Chelsea","2004-05","CB",84,86],
-    ["Damien Duff","Chelsea","2004-05","LW",84,85],["Joe Cole","Chelsea","2004-05","AM",82,85],
-    ["Eidur Gudjohnsen","Chelsea","2004-05","FW",82,84]
-  ].map(function(a){return {player:a[0],club:a[1],season:a[2],position:a[3],seasonRating:a[4],primeRating:a[5],primeMissing:false};});
-
-  /* ---------- state ---------- */
-  var DATA=[], isSample=true, pendingRows=null, pendingKeys=null;
-
-  var $=function(id){return document.getElementById(id);};
-  var teamSel=$("team"), seasonBox=$("seasonbox"), posSel=$("pos");
-  var list1=$("list1"), list2=$("list2"), cnt1=$("cnt1"), cnt2=$("cnt2");
-
-  function tierClass(v){
-    if(v>=90)return"t-elite"; if(v>=85)return"t-high"; if(v>=80)return"t-good"; if(v>=75)return"t-mid"; return"t-low";
-  }
-  function uniq(arr){var s={},o=[];arr.forEach(function(x){if(!s[x]){s[x]=1;o.push(x);}});return o;}
-
-  function buildTeams(){
-    var teams=uniq(DATA.map(function(d){return d.club;})).sort();
-    var prev=teamSel.value;
-    teamSel.innerHTML="";
-    teams.forEach(function(t){var o=document.createElement("option");o.value=t;o.textContent=t;teamSel.appendChild(o);});
-    if(teams.indexOf(prev)>-1)teamSel.value=prev;
-    buildSeasons(); buildPositions();
-  }
-  function currentTeam(){return teamSel.value;}
-  function seasonsForTeam(t){
-    return uniq(DATA.filter(function(d){return d.club===t;}).map(function(d){return d.season;}))
-      .sort(function(a,b){return b.localeCompare(a,undefined,{numeric:true});});
-  }
-  function buildSeasons(){
-    var t=currentTeam(), seasons=seasonsForTeam(t);
-    seasonBox.innerHTML="";
-    if(!seasons.length){seasonBox.innerHTML='<div class="empty">Nema sezona.</div>';return;}
-    seasons.forEach(function(s,i){
-      var lab=document.createElement("label");lab.className="opt";
-      var cb=document.createElement("input");cb.type="radio";cb.name="season";cb.value=s;cb.checked=(i===0);
-      cb.addEventListener("change",render);
-      lab.appendChild(cb);var sp=document.createElement("span");sp.textContent=s;lab.appendChild(sp);
-      seasonBox.appendChild(lab);
-    });
-  }
-  function buildPositions(){
-    var t=currentTeam();
-    var poss=uniq(DATA.filter(function(d){return d.club===t;}).map(function(d){return d.position;}).filter(Boolean)).sort();
-    var prev=posSel.value;
-    posSel.innerHTML='<option value="">Sve pozicije</option>';
-    poss.forEach(function(p){var o=document.createElement("option");o.value=p;o.textContent=p;posSel.appendChild(o);});
-    if(poss.indexOf(prev)>-1)posSel.value=prev; else posSel.value="";
-  }
-  function selectedSeasons(){
-    return Array.prototype.slice.call(seasonBox.querySelectorAll("input:checked")).map(function(c){return c.value;});
-  }
-
-  function rowHTML(d,rank,which){
-    var val=which==="prime"?d.primeRating:d.seasonRating;
-    var metaBits=[];
-    if(d.position)metaBits.push('<span class="pos">'+esc(d.position)+'</span>');
-    metaBits.push('<span>'+esc(d.season)+'</span>');
-    if(which==="prime"&&d.primeMissing)metaBits.push('<span>= sezona</span>');
-    return '<div class="row '+tierClass(val)+'">'+
-      '<div class="rank">'+rank+'</div>'+
-      '<div class="who"><div class="name">'+esc(d.player)+'</div>'+
-      '<div class="meta">'+metaBits.join("")+'</div></div>'+
-      '<div class="rating">'+fmt(val)+'</div></div>';
-  }
-  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
-  function fmt(v){return (Math.round(v*10)/10).toString();}
-
-  function render(){
-    var t=currentTeam(), seasons=selectedSeasons(), pos=posSel.value;
-    if(!t||!seasons.length){
-      var msg='<div class="empty-state">Izaberi tim i sezonu.</div>';
-      list1.innerHTML=msg;list2.innerHTML=msg;cnt1.textContent="0";cnt2.textContent="0";return;
-    }
-    var pool=DATA.filter(function(d){
-      return d.club===t && seasons.indexOf(d.season)>-1 && (!pos||d.position===pos);
-    });
-    if(!pool.length){
-      var m2='<div class="empty-state">Nema igrača za taj izbor.</div>';
-      list1.innerHTML=m2;list2.innerHTML=m2;cnt1.textContent="0";cnt2.textContent="0";return;
-    }
-    var bySeason=pool.slice().sort(function(a,b){return b.seasonRating-a.seasonRating||a.player.localeCompare(b.player);});
-    var byPrime =pool.slice().sort(function(a,b){return b.primeRating-a.primeRating||a.player.localeCompare(b.player);});
-    list1.innerHTML=bySeason.map(function(d,i){return rowHTML(d,i+1,"season");}).join("");
-    list2.innerHTML=byPrime.map(function(d,i){return rowHTML(d,i+1,"prime");}).join("");
-    cnt1.textContent=bySeason.length;cnt2.textContent=byPrime.length;
-  }
-
-  /* ---------- data loading ---------- */
-  var msgEl=$("msg"), mapping=$("mapping"), dstatus=$("dstatus"), samplehint=$("samplehint");
-  function setMsg(t,cls){msgEl.textContent=t;msgEl.className="msg"+(cls?" "+cls:"");}
-  function setStatus(){
-    dstatus.textContent=(isSample?"demo set":"tvoji podaci")+" · "+DATA.length+" igrača · "+uniq(DATA.map(function(d){return d.club;})).length+" klubova";
-    samplehint.textContent=isSample?"Prikazan je demo set. Otvori „Podaci\u201c ispod da ubaciš prave 38-0 rejtinge.":"";
-  }
-
-  function applyData(rows,sample){
-    DATA=rows;isSample=!!sample;
-    buildTeams();render();setStatus();
-    if(!sample){ store.set(KEY,JSON.stringify(rows)); }
-  }
-
-  function ingest(raw){
-    setMsg("");mapping.classList.remove("show");
-    var text=(raw||"").trim();
-    if(!text){setMsg("Nema podataka za učitavanje.","err");return;}
-    var rows=null;
-    try{ rows=findArray(JSON.parse(text)); }
-    catch(e){ rows=parseCSV(text); if(!rows.length)rows=null; }
-    if(!rows||!rows.length){setMsg("Ne mogu da pročitam podatke. Očekujem JSON niz objekata ili CSV.","err");return;}
-    if(typeof rows[0]!=="object"){setMsg("Format nije prepoznat (nije lista objekata).","err");return;}
-    var det=detectMap(rows);
-    var missing=REQUIRED.filter(function(f){return !det.map[f];});
-    if(missing.length){ pendingRows=rows;pendingKeys=det.keys;showMapping(det.map,det.keys);
-      setMsg("Poveži kolone koje nisam prepoznao.","");return; }
-    var normd=normalize(rows,det.map);
-    if(!normd.length){setMsg("Podaci prepoznati, ali nijedan red nema ispravan rejting.","err");return;}
-    applyData(normd,false);
-    setMsg("Učitano "+normd.length+" igrača.","ok");
-  }
-
-  // silent parse for the auto-loaded live feed (known schema, no mapping UI)
-  // ---- parser for the raw 38-0 scrape text (380db.txt) --------------------
+  /* ---- club canon + scrape parser ---- */
   var CLUB={
     "Arsenal":"Arsenal","Aston Villa":"Aston Villa","Barnsley":"Barnsley","Birmingham City":"Birmingham",
     "Blackburn Rovers":"Blackburn","Blackpool":"Blackpool","Bolton Wanderers":"Bolton","AFC Bournemouth":"Bournemouth",
@@ -473,122 +147,176 @@
     "West Ham":"West Ham","Tottenham":"Spurs","Sheffield Wed":"Sheffield Weds","Newcastle Utd":"Newcastle",
     "Bradford":"Bradford","Leeds":"Leeds","Derby":"Derby","Leicester":"Leicester","Coventry":"Coventry"
   };
-  function canonClub(name){
-    var n=(name||"").trim();
+  function canonClub(name){var n=(name||"").trim();
     if(/ FC$/.test(n))n=n.slice(0,-3).trim(); else if(/ AFC$/.test(n))n=n.slice(0,-4).trim();
     if(n.indexOf("AFC ")===0 && CLUB[n.slice(4)])return CLUB[n.slice(4)];
-    return CLUB[n]||CLUB[(name||"").trim()]||null;
-  }
+    return CLUB[n]||CLUB[(name||"").trim()]||null;}
   var POS=["GK","CB","LB","RB","LWB","RWB","SW","CDM","DM","CM","CAM","LM","RM","LW","RW","ST","CF","SS","LF","RF"];
-  var DEFP={CB:1,LB:1,RB:1,LWB:1,RWB:1,SW:1}, FWDP={ST:1,CF:1,LW:1,RW:1,LF:1,RF:1,SS:1};
+  var DEFP={CB:1,LB:1,RB:1,LWB:1,RWB:1,SW:1},FWDP={ST:1,CF:1,LW:1,RW:1,LF:1,RF:1,SS:1};
   function posGroup(p){p=(p||"").toUpperCase();if(p==="GK")return"GK";if(DEFP[p])return"DEF";if(FWDP[p])return"FWD";return"MID";}
   function isRating(s){return /^[3-9]\d$/.test(s);}
   function parseScrape(text){
     var lines=text.split(/\r?\n/).map(function(s){return s.trim();});
     var idx=[];
-    for(var i=0;i<lines.length;i++){
-      if(/^\d{4}\/\d{2}$/.test(lines[i])){
-        var j=i-1; while(j>=0 && !lines[j])j--;
-        idx.push({i:i, club:j>=0?lines[j]:"", season:lines[i]});
-      }
-    }
+    for(var i=0;i<lines.length;i++){if(/^\d{4}\/\d{2}$/.test(lines[i])){var j=i-1;while(j>=0&&!lines[j])j--;idx.push({i:i,club:j>=0?lines[j]:"",season:lines[i]});}}
     var rows=[];
     for(var k=0;k<idx.length;k++){
-      var start=idx[k].i, end=(k+1<idx.length)?idx[k+1].i-1:lines.length;
+      var start=idx[k].i,end=(k+1<idx.length)?idx[k+1].i-1:lines.length;
       var body=lines.slice(start+1,end);
       var club=canonClub(idx[k].club); if(!club)continue;
-      var s=idx[k].season, season=s.slice(0,4)+"-"+s.slice(5,7);
+      var s=idx[k].season,season=s.slice(0,4)+"-"+s.slice(5,7);
       var p=0;
       while(p<body.length){
         if(isRating(body[p])){
-          var rating=parseInt(body[p],10);
-          var q=p+1; while(q<body.length && !body[q])q++;
-          var name=q<body.length?body[q]:"";
-          var r=q+1;
-          if(r<body.length && body[r] && POS.indexOf(body[r])<0)r++;   // skip nationality
-          var poss=[];
-          while(r<body.length && POS.indexOf(body[r])>=0){poss.push(body[r]);r++;}
-          if(name && !isRating(name) && poss.length && /[A-Za-zÀ-ÿ]/.test(name)){
-            rows.push({player:name,club:club,season:season,
-              position:posGroup(poss[0]),seasonRating:rating,primeRating:rating});
+          var rating=parseInt(body[p],10),q=p+1; while(q<body.length&&!body[q])q++;
+          var name=q<body.length?body[q]:"",r=q+1;
+          if(r<body.length&&body[r]&&POS.indexOf(body[r])<0)r++;
+          var poss=[]; while(r<body.length&&POS.indexOf(body[r])>=0){poss.push(body[r]);r++;}
+          if(name&&!isRating(name)&&poss.length&&/[A-Za-zÀ-ÿ]/.test(name)){
+            rows.push({player:name,club:club,season:season,position:posGroup(poss[0]),seasonRating:rating,primeRating:rating});
           }
           p=Math.max(r,q+1);
         } else p++;
       }
     }
-    var seen={};
-    for(var m=0;m<rows.length;m++){seen[rows[m].club+"|"+rows[m].season+"|"+rows[m].player]=rows[m];}
-    return Object.keys(seen).map(function(k){return seen[k];});
+    var seen={}; for(var m=0;m<rows.length;m++)seen[rows[m].club+"|"+rows[m].season+"|"+rows[m].player]=rows[m];
+    return Object.keys(seen).map(function(x){return seen[x];});
+  }
+  function autoParseJSON(text){
+    var data; try{data=JSON.parse(text);}catch(e){return null;}
+    var arr=Array.isArray(data)?data:null;
+    if(!arr&&data&&typeof data==="object"){for(var k in data)if(Array.isArray(data[k])){arr=data[k];break;}}
+    if(!arr||!arr.length)return null;
+    var out=[];
+    for(var i=0;i<arr.length;i++){var o=arr[i];
+      var sr=parseFloat(o.seasonRating!=null?o.seasonRating:o.rating);
+      if(isNaN(sr))continue;
+      out.push({player:String(o.player||o.name||"").trim(),club:String(o.club||o.team||"").trim(),
+        season:String(o.season||"").trim(),position:posGroup(o.position||o.pos||"MID").length?( ["GK","DEF","MID","FWD"].indexOf(o.position)>=0?o.position:posGroup(o.position||o.pos) ):"MID",
+        seasonRating:sr,primeRating:sr});
+    }
+    return out.filter(function(x){return x.player&&x.club&&x.season;});
+  }
+  function parseAny(text){var t=text.trim();return (t.charAt(0)==="["||t.charAt(0)==="{")?autoParseJSON(text):parseScrape(text);}
+
+  /* ---- state ---- */
+  var DATA=[], isSample=false, selectedSeason=null, sortKey="seasonRating", sortDir=-1;
+  var ORDER=["GK","DEF","MID","FWD"];
+  var $=function(i){return document.getElementById(i);};
+  var teamSel=$("team"),posSel=$("pos"),seasonsHost=$("seasons"),grid=$("grid"),countEl=$("count");
+
+  function uniq(a){var s={},o=[];a.forEach(function(x){if(!s[x]){s[x]=1;o.push(x);}});return o;}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+  function tier(v){return v>=90?"t90":v>=80?"t80":v>=70?"t70":v>=60?"t60":"t0";}
+
+  function applyData(rows,sample){
+    // prime = a player's highest rating anywhere in the database (by name)
+    var prime={};
+    rows.forEach(function(r){var n=r.player;if(r.seasonRating>(prime[n]||0))prime[n]=r.seasonRating;});
+    rows.forEach(function(r){r.primeRating=prime[r.player];});
+    DATA=rows;isSample=!!sample;
+    buildTeams();setStatus();
+    if(!sample)store.set(KEY,JSON.stringify(rows));
+  }
+  function setStatus(){
+    $("dstatus").textContent=(isSample?"demo":"loaded")+" · "+DATA.length+" players · "+uniq(DATA.map(function(d){return d.club;})).length+" clubs · "+uniq(DATA.map(function(d){return d.season;})).length+" seasons";
   }
 
-  function autoParse(text){
-    var rows=null;
-    try{ rows=findArray(JSON.parse(text)); }catch(e){ rows=parseCSV(text); if(!rows.length)rows=null; }
-    if(!rows||!rows.length||typeof rows[0]!=="object")return null;
-    var det=detectMap(rows);
-    if(REQUIRED.filter(function(f){return !det.map[f];}).length)return null;
-    var n=normalize(rows,det.map);
-    return n.length?n:null;
+  function buildTeams(){
+    var teams=uniq(DATA.map(function(d){return d.club;})).sort();
+    var prev=teamSel.value; teamSel.innerHTML="";
+    teams.forEach(function(t){var o=document.createElement("option");o.value=t;o.textContent=t;teamSel.appendChild(o);});
+    if(teams.indexOf(prev)>-1)teamSel.value=prev;
+    buildSeasons();buildPositions();render();
   }
-
-  function showMapping(map,keys){
-    mapping.classList.add("show");
-    mapping.querySelectorAll("select").forEach(function(sel){
-      var k=sel.getAttribute("data-k"),req=REQUIRED.indexOf(k)>-1;
-      sel.innerHTML=(req?"":'<option value="">— nema —</option>');
-      keys.forEach(function(key){var o=document.createElement("option");o.value=key;o.textContent=key;sel.appendChild(o);});
-      if(map[k])sel.value=map[k];
+  function seasonsForTeam(t){
+    return uniq(DATA.filter(function(d){return d.club===t;}).map(function(d){return d.season;}))
+      .sort(function(a,b){return b.localeCompare(a,undefined,{numeric:true});});
+  }
+  function buildSeasons(){
+    var t=teamSel.value,ss=seasonsForTeam(t);
+    seasonsHost.innerHTML="";
+    if(!ss.length){seasonsHost.innerHTML='<span class="empty">No seasons.</span>';selectedSeason=null;return;}
+    if(ss.indexOf(selectedSeason)<0)selectedSeason=ss[0];
+    ss.forEach(function(s){
+      var el=document.createElement("span");el.className="s"+(s===selectedSeason?" on":"");el.textContent=s;
+      el.onclick=function(){selectedSeason=s;buildSeasons();render();};
+      seasonsHost.appendChild(el);
     });
   }
-  $("applyMap").addEventListener("click",function(){
-    if(!pendingRows)return;
-    var map={};mapping.querySelectorAll("select").forEach(function(sel){var v=sel.value;if(v)map[sel.getAttribute("data-k")]=v;});
-    for(var i=0;i<REQUIRED.length;i++){if(!map[REQUIRED[i]]){setMsg("Nedostaje obavezno polje.","err");return;}}
-    var normd=normalize(pendingRows,map);
-    if(!normd.length){setMsg("Mapiranje ne daje nijedan red sa ispravnim rejtingom.","err");return;}
-    applyData(normd,false);mapping.classList.remove("show");
-    setMsg("Učitano "+normd.length+" igrača.","ok");pendingRows=null;
-  });
+  function buildPositions(){
+    var t=teamSel.value,present={};
+    DATA.forEach(function(d){if(d.club===t)present[d.position]=1;});
+    var prev=posSel.value; posSel.innerHTML='<option value="">All positions</option>';
+    ORDER.forEach(function(p){if(present[p]){var o=document.createElement("option");o.value=p;o.textContent=p;posSel.appendChild(o);}});
+    if(prev&&present[prev])posSel.value=prev; else posSel.value="";
+  }
 
-  $("loadBtn").addEventListener("click",function(){
-    var url=$("urlBox").value.trim();
-    if(url){ setMsg("Učitavam sa URL-a…");
-      fetch(url).then(function(r){return r.text();}).then(ingest).catch(function(){setMsg("Ne mogu da dohvatim URL (proveri adresu ili CORS).","err");});
-      return;
-    }
-    ingest($("pasteBox").value);
-  });
-  $("fileInput").addEventListener("change",function(e){
-    var f=e.target.files[0];if(!f)return;
-    var rd=new FileReader();rd.onload=function(){ $("pasteBox").value=rd.result;ingest(rd.result); };rd.readAsText(f);
-  });
-  $("resetBtn").addEventListener("click",function(){
-    store.set(KEY,"");applyData(SAMPLE.slice(),true);setMsg("Vraćen demo set.","ok");
-  });
+  function render(){
+    var t=teamSel.value,season=selectedSeason,pos=posSel.value;
+    if(!t||!season){grid.innerHTML='<div class="empty-state">Pick a team and a season.</div>';countEl.textContent="";return;}
+    var pool=DATA.filter(function(d){return d.club===t&&d.season===season&&(!pos||d.position===pos);});
+    if(!pool.length){grid.innerHTML='<div class="empty-state">No players for this selection.</div>';countEl.textContent="";return;}
+    pool.sort(function(a,b){
+      var d=(b[sortKey]-a[sortKey])*(sortDir<0?1:-1);
+      return d||a.player.localeCompare(b.player);
+    });
+    var arrow=sortDir<0?"▼":"▲";
+    var head='<thead><tr><th></th><th>Player</th><th class="num">Pos</th>'
+      +'<th class="num sortable'+(sortKey==="seasonRating"?" active":"")+'" data-k="seasonRating">Season'+(sortKey==="seasonRating"?" "+arrow:"")+'</th>'
+      +'<th class="num sortable'+(sortKey==="primeRating"?" active":"")+'" data-k="primeRating">Prime'+(sortKey==="primeRating"?" "+arrow:"")+'</th></tr></thead>';
+    var body="<tbody>";
+    pool.forEach(function(d,i){
+      body+='<tr><td>'+(i+1)+'</td><td class="player">'+esc(d.player)+'</td><td class="pos">'+esc(d.position)+'</td>'
+        +'<td class="num"><span class="r '+tier(d.seasonRating)+'">'+d.seasonRating+'</span></td>'
+        +'<td class="num"><span class="r '+tier(d.primeRating)+'">'+d.primeRating+'</span></td></tr>';
+    });
+    body+="</tbody>";
+    grid.innerHTML='<table>'+head+body+'</table>';
+    countEl.textContent=pool.length+" players · "+t+" "+season;
+    Array.prototype.forEach.call(grid.querySelectorAll("th.sortable"),function(th){
+      th.onclick=function(){var k=th.getAttribute("data-k");if(sortKey===k)sortDir=-sortDir;else{sortKey=k;sortDir=-1;}render();};
+    });
+  }
 
   teamSel.addEventListener("change",function(){buildSeasons();buildPositions();render();});
   posSel.addEventListener("change",render);
 
-  /* ---------- init ---------- */
+  /* ---- manual data panel ---- */
+  var msgEl=$("msg");
+  function setMsg(t,c){msgEl.textContent=t;msgEl.className="msg"+(c?" "+c:"");}
+  function ingest(text){
+    var rows=parseAny(text||"");
+    if(!rows||!rows.length){setMsg("Could not read any players from that.","err");return;}
+    applyData(rows,false);render();setMsg("Loaded "+rows.length+" players.","ok");
+  }
+  $("loadBtn").addEventListener("click",function(){
+    var url=$("urlBox").value.trim();
+    if(url){setMsg("Loading from URL...");fetch(url).then(function(r){return r.text();}).then(ingest).catch(function(){setMsg("Could not fetch that URL (check the address or CORS).","err");});return;}
+    ingest($("pasteBox").value);
+  });
+  $("fileInput").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){$("pasteBox").value=rd.result;ingest(rd.result);};rd.readAsText(f);});
+  $("resetBtn").addEventListener("click",function(){store.set(KEY,"");applyData(SAMPLE.slice(),true);render();setMsg("Reset to demo.","ok");});
+
+  /* ---- demo ---- */
+  var SAMPLE=[
+    ["David Seaman","Arsenal","1997-98","GK",88],["Tony Adams","Arsenal","1997-98","DEF",88],
+    ["Patrick Vieira","Arsenal","1997-98","MID",89],["Dennis Bergkamp","Arsenal","1997-98","FWD",90],
+    ["Marc Overmars","Arsenal","1997-98","FWD",85],["Emmanuel Petit","Arsenal","1997-98","MID",87],
+    ["Nicolas Anelka","Arsenal","1997-98","FWD",85],["Nigel Winterburn","Arsenal","1997-98","DEF",84]
+  ].map(function(a){return {player:a[0],club:a[1],season:a[2],position:a[3],seasonRating:a[4],primeRating:a[4]};});
+
+  /* ---- init ---- */
   (async function(){
-    // 1) the raw 38-0 scrape in the repo is the source of truth
     try{
       var resp=await fetch(DATA_URL+(DATA_URL.indexOf("?")<0?"?":"&")+"v="+Date.now(),{cache:"no-store"});
-      if(resp.ok){
-        var txt=await resp.text();
-        var t=txt.trim();
-        var rows=(t.charAt(0)==="["||t.charAt(0)==="{") ? autoParse(txt) : parseScrape(txt);
-        if(rows&&rows.length){ applyData(rows,false); return; }   // parsed data
-        // fetch ok but empty/unusable: wipe stale cache, show demo placeholder
-        store.set(KEY,"");
-        applyData(SAMPLE.slice(),true);
-        return;
-      }
+      if(resp.ok){var rows=parseAny(await resp.text());
+        if(rows&&rows.length){applyData(rows,false);render();return;}
+        store.set(KEY,"");applyData(SAMPLE.slice(),true);render();return;}
     }catch(e){}
-    // 2) only if the fetch itself FAILED: last saved set, else demo
     var saved=await store.get(KEY);
-    if(saved){ try{ var arr=JSON.parse(saved); if(Array.isArray(arr)&&arr.length){ applyData(arr,false); return; } }catch(e){} }
-    applyData(SAMPLE.slice(),true);
+    if(saved){try{var arr=JSON.parse(saved);if(Array.isArray(arr)&&arr.length){applyData(arr,false);render();return;}}catch(e){}}
+    applyData(SAMPLE.slice(),true);render();
   })();
 })();
 </script>
