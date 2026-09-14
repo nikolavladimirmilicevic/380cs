@@ -257,9 +257,12 @@
     if(!t||!season){grid.innerHTML='<div class="empty-state">Pick a team and a season.</div>';countEl.textContent="";return;}
     var pool=DATA.filter(function(d){return d.club===t&&d.season===season&&(!pos||d.position===pos);});
     if(!pool.length){grid.innerHTML='<div class="empty-state">No players for this selection.</div>';countEl.textContent="";return;}
+    var other=sortKey==="seasonRating"?"primeRating":"seasonRating";
     pool.sort(function(a,b){
-      var d=(b[sortKey]-a[sortKey])*(sortDir<0?1:-1);
-      return d||a.player.localeCompare(b.player);
+      var dir=sortDir<0?1:-1;
+      var d=(b[sortKey]-a[sortKey])*dir; if(d)return d;
+      var d2=(b[other]-a[other])*dir; if(d2)return d2;
+      return a.player.localeCompare(b.player);
     });
     var arrow=sortDir<0?"▼":"▲";
     var head='<thead><tr><th></th><th>Player</th><th class="num">Pos</th>'
