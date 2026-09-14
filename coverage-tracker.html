@@ -105,8 +105,8 @@
           var q=p+1;while(q<body.length&&!body[q])q++;
           var name=q<body.length?body[q]:"";
           var r=q+1; if(r<body.length&&body[r]&&POS.indexOf(body[r])<0)r++;
-          while(r<body.length&&POS.indexOf(body[r])>=0)r++;
-          if(name&&!isRating(name))names[name]=1;
+          var np=0; while(r<body.length&&POS.indexOf(body[r])>=0){r++;np++;}
+          if(name&&!isRating(name)&&np>0&&/[A-Za-zÀ-ÿ]/.test(name))names[name]=1;
           p=Math.max(r,q+1);
         } else p++;
       }

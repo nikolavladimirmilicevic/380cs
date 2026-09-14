@@ -508,9 +508,9 @@
           if(r<body.length && body[r] && POS.indexOf(body[r])<0)r++;   // skip nationality
           var poss=[];
           while(r<body.length && POS.indexOf(body[r])>=0){poss.push(body[r]);r++;}
-          if(name && !isRating(name)){
+          if(name && !isRating(name) && poss.length && /[A-Za-zÀ-ÿ]/.test(name)){
             rows.push({player:name,club:club,season:season,
-              position:poss.length?posGroup(poss[0]):"MID",seasonRating:rating,primeRating:rating});
+              position:posGroup(poss[0]),seasonRating:rating,primeRating:rating});
           }
           p=Math.max(r,q+1);
         } else p++;
