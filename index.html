@@ -229,9 +229,9 @@
     }
   };
   var KEY="thirtyeight_dataset_v1";
-  // Where the app pulls fresh ratings from on load. Same-origin file by default
-  // (no CORS). Point it at your hosted players.json if app and data live apart.
-  var DATA_URL="./players.json";
+  // The app reads the raw 38-0 scrape directly and parses it in the browser, so
+  // updating 380db.txt in the repo puts the new data in the app automatically.
+  var DATA_URL="./380db.txt";
 
   /* ---------- field detection ---------- */
   var ALIASES={
@@ -455,6 +455,72 @@
   }
 
   // silent parse for the auto-loaded live feed (known schema, no mapping UI)
+  // ---- parser for the raw 38-0 scrape text (380db.txt) --------------------
+  var CLUB={
+    "Arsenal":"Arsenal","Aston Villa":"Aston Villa","Barnsley":"Barnsley","Birmingham City":"Birmingham",
+    "Blackburn Rovers":"Blackburn","Blackpool":"Blackpool","Bolton Wanderers":"Bolton","AFC Bournemouth":"Bournemouth",
+    "Bournemouth":"Bournemouth","Bradford City":"Bradford","Brighton & Hove Albion":"Brighton","Brentford":"Brentford",
+    "Burnley":"Burnley","Cardiff City":"Cardiff","Charlton Athletic":"Charlton","Chelsea":"Chelsea",
+    "Coventry City":"Coventry","Crystal Palace":"Crystal Palace","Derby County":"Derby","Everton":"Everton",
+    "Fulham":"Fulham","Huddersfield Town":"Huddersfield","Hull City":"Hull","Ipswich Town":"Ipswich",
+    "Leeds United":"Leeds","Leicester City":"Leicester","Liverpool":"Liverpool","Luton Town":"Luton",
+    "Manchester City":"Man City","Manchester United":"Man Utd","Middlesbrough":"Middlesbrough","Newcastle United":"Newcastle",
+    "Norwich City":"Norwich","Nottingham Forest":"Nott'm Forest","Oldham Athletic":"Oldham","Portsmouth":"Portsmouth",
+    "Queens Park Rangers":"QPR","Reading":"Reading","Sheffield United":"Sheffield Utd","Sheffield Wednesday":"Sheffield Weds",
+    "Southampton":"Southampton","Stoke City":"Stoke","Sunderland":"Sunderland","Swansea City":"Swansea",
+    "Swindon Town":"Swindon","Tottenham Hotspur":"Spurs","Watford":"Watford","West Bromwich Albion":"West Brom",
+    "West Ham United":"West Ham","Wigan Athletic":"Wigan","Wimbledon":"Wimbledon","Wolverhampton Wanderers":"Wolves",
+    "West Ham":"West Ham","Tottenham":"Spurs","Sheffield Wed":"Sheffield Weds","Newcastle Utd":"Newcastle",
+    "Bradford":"Bradford","Leeds":"Leeds","Derby":"Derby","Leicester":"Leicester","Coventry":"Coventry"
+  };
+  function canonClub(name){
+    var n=(name||"").trim();
+    if(/ FC$/.test(n))n=n.slice(0,-3).trim(); else if(/ AFC$/.test(n))n=n.slice(0,-4).trim();
+    if(n.indexOf("AFC ")===0 && CLUB[n.slice(4)])return CLUB[n.slice(4)];
+    return CLUB[n]||CLUB[(name||"").trim()]||null;
+  }
+  var POS=["GK","CB","LB","RB","LWB","RWB","SW","CDM","DM","CM","CAM","LM","RM","LW","RW","ST","CF","SS","LF","RF"];
+  var DEFP={CB:1,LB:1,RB:1,LWB:1,RWB:1,SW:1}, FWDP={ST:1,CF:1,LW:1,RW:1,LF:1,RF:1,SS:1};
+  function posGroup(p){p=(p||"").toUpperCase();if(p==="GK")return"GK";if(DEFP[p])return"DEF";if(FWDP[p])return"FWD";return"MID";}
+  function isRating(s){return /^[3-9]\d$/.test(s);}
+  function parseScrape(text){
+    var lines=text.split(/\r?\n/).map(function(s){return s.trim();});
+    var idx=[];
+    for(var i=0;i<lines.length;i++){
+      if(/^\d{4}\/\d{2}$/.test(lines[i])){
+        var j=i-1; while(j>=0 && !lines[j])j--;
+        idx.push({i:i, club:j>=0?lines[j]:"", season:lines[i]});
+      }
+    }
+    var rows=[];
+    for(var k=0;k<idx.length;k++){
+      var start=idx[k].i, end=(k+1<idx.length)?idx[k+1].i-1:lines.length;
+      var body=lines.slice(start+1,end);
+      var club=canonClub(idx[k].club); if(!club)continue;
+      var s=idx[k].season, season=s.slice(0,4)+"-"+s.slice(5,7);
+      var p=0;
+      while(p<body.length){
+        if(isRating(body[p])){
+          var rating=parseInt(body[p],10);
+          var q=p+1; while(q<body.length && !body[q])q++;
+          var name=q<body.length?body[q]:"";
+          var r=q+1;
+          if(r<body.length && body[r] && POS.indexOf(body[r])<0)r++;   // skip nationality
+          var poss=[];
+          while(r<body.length && POS.indexOf(body[r])>=0){poss.push(body[r]);r++;}
+          if(name && !isRating(name)){
+            rows.push({player:name,club:club,season:season,
+              position:poss.length?posGroup(poss[0]):"MID",seasonRating:rating,primeRating:rating});
+          }
+          p=Math.max(r,q+1);
+        } else p++;
+      }
+    }
+    var seen={};
+    for(var m=0;m<rows.length;m++){seen[rows[m].club+"|"+rows[m].season+"|"+rows[m].player]=rows[m];}
+    return Object.keys(seen).map(function(k){return seen[k];});
+  }
+
   function autoParse(text){
     var rows=null;
     try{ rows=findArray(JSON.parse(text)); }catch(e){ rows=parseCSV(text); if(!rows.length)rows=null; }
@@ -505,15 +571,23 @@
 
   /* ---------- init ---------- */
   (async function(){
-    // 1) fresh from the data source (refreshed by the CI pipeline)
+    // 1) the raw 38-0 scrape in the repo is the source of truth
     try{
       var resp=await fetch(DATA_URL+(DATA_URL.indexOf("?")<0?"?":"&")+"v="+Date.now(),{cache:"no-store"});
-      if(resp.ok){ var rows=autoParse(await resp.text()); if(rows&&rows.length){ applyData(rows,false); return; } }
+      if(resp.ok){
+        var txt=await resp.text();
+        var t=txt.trim();
+        var rows=(t.charAt(0)==="["||t.charAt(0)==="{") ? autoParse(txt) : parseScrape(txt);
+        if(rows&&rows.length){ applyData(rows,false); return; }   // parsed data
+        // fetch ok but empty/unusable: wipe stale cache, show demo placeholder
+        store.set(KEY,"");
+        applyData(SAMPLE.slice(),true);
+        return;
+      }
     }catch(e){}
-    // 2) last set saved in this browser
+    // 2) only if the fetch itself FAILED: last saved set, else demo
     var saved=await store.get(KEY);
     if(saved){ try{ var arr=JSON.parse(saved); if(Array.isArray(arr)&&arr.length){ applyData(arr,false); return; } }catch(e){} }
-    // 3) built-in demo
     applyData(SAMPLE.slice(),true);
   })();
 })();
