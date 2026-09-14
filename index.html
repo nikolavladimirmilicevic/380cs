@@ -49,7 +49,7 @@
     font-variant-numeric:tabular-nums;text-align:right;width:34px;font-weight:700}
   tbody td:last-child{border-right:1px solid var(--line);border-radius:0 10px 10px 0}
   td.player{font-weight:650}
-  td.pos{color:var(--accent);font-weight:700;font-size:12.5px}
+  td.pos{color:var(--accent);font-weight:700;font-size:12.5px;text-align:center;width:52px}
   td.num{text-align:center;width:64px}
   .r{font-weight:800;font-variant-numeric:tabular-nums;border-radius:7px;padding:5px 0;display:inline-block;
     min-width:42px;border:1px solid var(--line);background:#0c1611;font-size:15px}
@@ -279,7 +279,7 @@
     });
   }
 
-  teamSel.addEventListener("change",function(){buildSeasons();buildPositions();render();});
+  teamSel.addEventListener("change",function(){selectedSeason=null;buildSeasons();buildPositions();render();});
   posSel.addEventListener("change",render);
 
   /* ---- manual data panel ---- */
