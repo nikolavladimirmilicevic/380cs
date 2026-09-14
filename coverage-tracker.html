@@ -5,73 +5,57 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>38-0 Coverage Tracker</title>
 <style>
-  :root{--bg:#0a1310;--panel:#101d18;--panel2:#0d1712;--line:#20342b;--ink:#e9f1ec;--muted:#8ba597;--muted2:#5f776b;--accent:#37e59a;--done:#63c583;--miss:#3a4a42}
+  :root{--bg:#0a1310;--panel:#101d18;--panel2:#0d1712;--line:#20342b;--ink:#e9f1ec;--muted:#8ba597;--muted2:#5f776b;--accent:#37e59a;--done:#63c583}
   *{box-sizing:border-box}
   body{margin:0;background:radial-gradient(1200px 500px at 50% -10%,#123024 0%,transparent 60%),var(--bg);color:var(--ink);font-family:'Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;padding:20px clamp(12px,4vw,40px) 60px}
   .wrap{max-width:1080px;margin:0 auto}
   .logo{font-weight:800;letter-spacing:-.5px;font-size:24px;display:flex;align-items:center;gap:9px}
   .logo .score{background:var(--accent);color:#062018;padding:1px 8px;border-radius:5px}
   .logo .sub{color:var(--muted);font-weight:600;font-size:13px}
-  .lede{color:var(--muted);font-size:13.5px;margin:6px 0 18px;max-width:680px;line-height:1.5}
+  .lede{color:var(--muted);font-size:13.5px;margin:6px 0 18px;max-width:700px;line-height:1.5}
   .prog{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
   .bar{height:12px;background:#0c1611;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:8px}
-  .bar>div{height:100%;background:var(--accent);width:0%}
+  .bar>div{height:100%;background:var(--accent);width:0%;transition:width .3s}
   .stat{display:flex;gap:22px;flex-wrap:wrap;align-items:baseline}
   .stat b{font-size:26px;font-variant-numeric:tabular-nums}
   .stat span{color:var(--muted);font-size:13px}
-  .entry{display:grid;grid-template-columns:1fr 1fr;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
-  @media(max-width:640px){.entry{grid-template-columns:1fr}}
-  label{display:block;font-size:11px;letter-spacing:.4px;color:var(--muted);margin-bottom:6px;font-weight:700}
-  select,textarea,button,input{font-family:inherit;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:10px 11px;font-size:14px;width:100%}
-  select{appearance:none;cursor:pointer}
-  textarea{grid-column:1/-1;min-height:120px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;resize:vertical}
-  .row{grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  button{width:auto;cursor:pointer;font-weight:700;padding:9px 16px}
-  .btn-primary{background:var(--accent);border-color:var(--accent);color:#062018}
-  .btn-primary:hover{filter:brightness(1.08)}
-  .btn-ghost:hover{border-color:var(--muted2)}
-  .msg{font-size:12.5px;color:var(--accent);min-height:16px;flex:1}
+  .srcline{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+  .srcline .note{font-size:12px;color:var(--muted)}
+  button,.filelabel{font-family:inherit;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:7px 14px;font-size:12.5px;cursor:pointer;font-weight:700}
+  button:hover,.filelabel:hover{border-color:var(--muted2)}
+  input[type=file]{display:none}
   .tabs{display:flex;gap:8px;margin:6px 0 12px}
-  .tabs button{background:var(--panel2);color:var(--muted);border:1px solid var(--line);padding:7px 14px;font-size:12.5px}
+  .tabs button{color:var(--muted)}
   .tabs button.on{background:var(--accent);color:#062018;border-color:var(--accent)}
   .grp{background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-bottom:8px;overflow:hidden}
   .grp>summary{cursor:pointer;padding:11px 14px;font-weight:700;font-size:13.5px;display:flex;justify-content:space-between;list-style:none}
   .grp>summary::-webkit-details-marker{display:none}
   .grp>summary .c{color:var(--muted);font-weight:600;font-size:12px}
   .chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 12px}
-  .chip{font-size:12px;padding:4px 9px;border-radius:20px;border:1px solid var(--line);cursor:pointer;background:#0c1611;color:var(--muted)}
-  .chip.done{color:#062018;background:var(--done);border-color:var(--done)}
+  .chip{font-size:12px;padding:4px 9px;border-radius:20px;border:1px solid var(--line);background:#0c1611;color:var(--muted)}
+  .chip.done{color:#062018;background:var(--done);border-color:var(--done);cursor:default}
+  .chip.miss{cursor:pointer}
   .chip.miss:hover{border-color:var(--accent);color:var(--ink)}
   .alldone{color:var(--done);font-size:12px;padding:0 14px 12px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="logo"><span class="score">38-0</span> Coverage Tracker <span class="sub">scraping progress</span></div>
-  <p class="lede">Prati koje klub-sezone si već skinuo iz 38-0 i šta fali, prema svih 706 PL klub-sezona (1992-93 do 2026-27). Sve se čuva u tvom pregledaču. Klikni klub-sezonu da je označiš, ili nalepi rejtinge i sačuvaj. Kad završiš rundu, Export daje jedan JSON koji mi pošalješ da ga uklopim u aplikaciju.</p>
+  <div class="logo"><span class="score">38-0</span> Coverage Tracker <span class="sub">cita 380db.txt</span></div>
+  <p class="lede">Automatski cita tvoj <b>380db.txt</b> i boji zeleno svaku klub-sezonu koju si vec skrejpovao, prema svih 706 PL klub-sezona (1992-93 do 2026-27). Sivo je ono sto fali. Klik na sivu kopira naziv, da znas sta sledece da skrejpujes. Osvezi posle novog push-a.</p>
 
   <div class="prog">
-    <div class="stat"><div><b id="doneN">0</b> <span>uneto</span></div><div><b id="missN">706</b> <span>fali</span></div><div><b id="pct">0%</b> <span>pokriveno</span></div></div>
+    <div class="stat"><div><b id="doneN">0</b> <span>uradjeno</span></div><div><b id="missN">706</b> <span>fali</span></div><div><b id="pct">0%</b> <span>pokriveno</span></div><div><b id="playersN">0</b> <span>igraca</span></div></div>
     <div class="bar"><div id="barFill"></div></div>
-  </div>
-
-  <div class="entry">
-    <div><label>Klub</label><select id="club"></select></div>
-    <div><label>Sezona</label><select id="season"></select></div>
-    <textarea id="raw" placeholder="Nalepi rejtinge za izabranu klub-sezonu ovako kako ti igra prikaže (ime, pozicija, rejting, prime). Format nije bitan zasad, čuvam sirovo pa parsiramo kasnije. Ili samo označi kao urađeno bez teksta."></textarea>
-    <div class="row">
-      <button class="btn-primary" id="save">Sačuvaj / označi urađeno</button>
-      <button class="btn-ghost" id="clear">Obriši ovu</button>
-      <span class="msg" id="msg"></span>
-    </div>
-    <div class="row">
-      <button class="btn-ghost" id="export">Export JSON</button>
-      <label class="btn-ghost" for="imp" style="cursor:pointer;width:auto;padding:9px 16px;border-radius:9px;border:1px solid var(--line);font-weight:700;font-size:14px">Import JSON</label>
-      <input type="file" id="imp" accept=".json" style="display:none">
+    <div class="srcline">
+      <button id="refresh">Osvezi</button>
+      <label class="filelabel" for="fileInput">Otvori 380db.txt lokalno</label>
+      <input type="file" id="fileInput" accept=".txt">
+      <span class="note" id="srcNote"></span>
     </div>
   </div>
 
-  <div class="tabs"><button id="tSeason" class="on">Po sezoni</button><button id="tClub">Po klubu</button><button id="tAll">Sve</button></div>
+  <div class="tabs"><button id="tSeason" class="on">Po sezoni</button><button id="tClub">Po klubu</button><button id="tMiss">Samo sto fali</button></div>
   <div id="list"></div>
 </div>
 <script>
@@ -79,122 +63,129 @@
   "use strict";
   var UNIVERSE={"2014-15":["Arsenal","Aston Villa","Burnley","Chelsea","Crystal Palace","Everton","Hull","Leicester","Liverpool","Man City","Man Utd","Newcastle","QPR","Southampton","Spurs","Stoke","Sunderland","Swansea","West Brom","West Ham"],"2016-17":["Arsenal","Bournemouth","Burnley","Chelsea","Crystal Palace","Everton","Hull","Leicester","Liverpool","Man City","Man Utd","Middlesbrough","Southampton","Spurs","Stoke","Sunderland","Swansea","Watford","West Brom","West Ham"],"2003-04":["Arsenal","Aston Villa","Birmingham","Blackburn","Bolton","Charlton","Chelsea","Everton","Fulham","Leeds","Leicester","Liverpool","Man City","Man Utd","Middlesbrough","Newcastle","Portsmouth","Southampton","Spurs","Wolves"],"2015-16":["Arsenal","Aston Villa","Bournemouth","Chelsea","Crystal Palace","Everton","Leicester","Liverpool","Man City","Man Utd","Newcastle","Norwich","Southampton","Spurs","Stoke","Sunderland","Swansea","Watford","West Brom","West Ham"],"2018-19":["Arsenal","Bournemouth","Brighton","Burnley","Cardiff","Chelsea","Crystal Palace","Everton","Fulham","Huddersfield","Leicester","Liverpool","Man City","Man Utd","Newcastle","Southampton","Spurs","Watford","West Ham","Wolves"],"2007-08":["Arsenal","Aston Villa","Birmingham","Blackburn","Bolton","Chelsea","Derby","Everton","Fulham","Liverpool","Man City","Man Utd","Middlesbrough","Newcastle","Portsmouth","Reading","Spurs","Sunderland","West Ham","Wigan"],"2002-03":["Arsenal","Aston Villa","Birmingham","Blackburn","Bolton","Charlton","Chelsea","Everton","Fulham","Leeds","Liverpool","Man City","Man Utd","Middlesbrough","Newcastle","Southampton","Spurs","Sunderland","West Brom","West Ham"],"2013-14":["Arsenal","Aston Villa","Cardiff","Chelsea","Crystal Palace","Everton","Fulham","Hull","Liverpool","Man City","Man Utd","Newcastle","Norwich","Southampton","Spurs","Stoke","Sunderland","Swansea","West Brom","West Ham"],"2019-20":["Arsenal","Aston Villa","Bournemouth","Brighton","Burnley","Chelsea","Crystal Palace","Everton","Leicester","Liverpool","Man City","Man Utd","Newcastle","Norwich","Sheffield Utd","Southampton","Spurs","Watford","West Ham","Wolves"],"2022-23":["Arsenal","Aston Villa","Bournemouth","Brentford","Brighton","Chelsea","Crystal Palace","Everton","Fulham","Leeds","Leicester","Liverpool","Man City","Man Utd","Newcastle","Nott'm Forest","Southampton","Spurs","West Ham","Wolves"],"2004-05":["Arsenal","Aston Villa","Birmingham","Blackburn","Bolton","Charlton","Chelsea","Crystal Palace","Everton","Fulham","Liverpool","Man City","Man Utd","Middlesbrough","Newcastle","Norwich","Portsmouth","Southampton","Spurs","West Brom"],"2012-13":["Arsenal","Aston Villa","Chelsea","Everton","Fulham","Liverpool","Man City","Man Utd","Newcastle","Norwich","QPR","Reading","Southampton","Spurs","Stoke","Sunderland","Swansea","West Brom","West Ham","Wigan"],"2009-10":["Arsenal","Aston Villa","Birmingham","Blackburn","Bolton","Burnley","Chelsea","Everton","Fulham","Hull","Liverpool","Man City","Man Utd","Portsmouth","Spurs","Stoke","Sunderland","West Ham","Wigan","Wolves"],"2001-02":["Arsenal","Aston Villa","Blackburn","Bolton","Charlton","Chelsea","Derby","Everton","Fulham","Ipswich","Leeds","Leicester","Liverpool","Man Utd","Middlesbrough","Newcastle","Southampton","Spurs","Sunderland","West Ham"],"2021-22":["Arsenal","Aston Villa","Brentford","Brighton","Burnley","Chelsea","Crystal Palace","Everton","Leeds","Leicester","Liverpool","Man City","Man Utd","Newcastle","Norwich","Southampton","Spurs","Watford","West Ham","Wolves"],"2025-26":["Arsenal","Aston Villa","Bournemouth","Brentford","Brighton","Burnley","Chelsea","Crystal Palace","Everton","Fulham","Leeds","Liverpool","Man City","Man Utd","Newcastle","Nott'm Forest","Spurs","Sunderland","West Ham","Wolves"],"2005-06":["Arsenal","Aston Villa","Birmingham","Blackburn","Bolton","Charlton","Chelsea","Everton","Fulham","Liverpool","Man City","Man Utd","Middlesbrough","Newcastle","Portsmouth","Spurs","Sunderland","West Brom","West Ham","Wigan"],"2010-11":["Arsenal","Aston Villa","Birmingham","Blackburn","Blackpool","Bolton","Chelsea","Everton","Fulham","Liverpool","Man City","Man Utd","Newcastle","Spurs","Stoke","Sunderland","West Brom","West Ham","Wigan","Wolves"],"2011-12":["Arsenal","Aston Villa","Blackburn","Bolton","Chelsea","Everton","Fulham","Liverpool","Man City","Man Utd","Newcastle","Norwich","QPR","Spurs","Stoke","Sunderland","Swansea","West Brom","Wigan","Wolves"],"2017-18":["Arsenal","Bournemouth","Brighton","Burnley","Chelsea","Crystal Palace","Everton","Huddersfield","Leicester","Liverpool","Man City","Man Utd","Newcastle","Southampton","Spurs","Stoke","Swansea","Watford","West Brom","West Ham"],"2006-07":["Arsenal","Aston Villa","Blackburn","Bolton","Charlton","Chelsea","Everton","Fulham","Liverpool","Man City","Man Utd","Middlesbrough","Newcastle","Portsmouth","Reading","Sheffield Utd","Spurs","Watford","West Ham","Wigan"],"2024-25":["Arsenal","Aston Villa","Bournemouth","Brentford","Brighton","Chelsea","Crystal Palace","Everton","Fulham","Ipswich","Leicester","Liverpool","Man City","Man Utd","Newcastle","Nott'm Forest","Southampton","Spurs","West Ham","Wolves"],"2000-01":["Arsenal","Aston Villa","Bradford","Charlton","Chelsea","Coventry","Derby","Everton","Ipswich","Leeds","Leicester","Liverpool","Man City","Man Utd","Middlesbrough","Newcastle","Southampton","Spurs","Sunderland","West Ham"],"2026-27":["Arsenal","Aston Villa","Bournemouth","Brentford","Brighton","Chelsea","Coventry","Crystal Palace","Everton","Fulham","Hull","Ipswich","Leeds","Liverpool","Man City","Man Utd","Newcastle","Nott'm Forest","Spurs","Sunderland"],"2023-24":["Arsenal","Aston Villa","Bournemouth","Brentford","Brighton","Burnley","Chelsea","Crystal Palace","Everton","Fulham","Liverpool","Luton","Man City","Man Utd","Newcastle","Nott'm Forest","Sheffield Utd","Spurs","West Ham","Wolves"],"2008-09":["Arsenal","Aston Villa","Blackburn","Bolton","Chelsea","Everton","Fulham","Hull","Liverpool","Man City","Man Utd","Middlesbrough","Newcastle","Portsmouth","Spurs","Stoke","Sunderland","West Brom","West Ham","Wigan"],"2020-21":["Arsenal","Aston Villa","Brighton","Burnley","Chelsea","Crystal Palace","Everton","Fulham","Leeds","Leicester","Liverpool","Man City","Man Utd","Newcastle","Sheffield Utd","Southampton","Spurs","West Brom","West Ham","Wolves"],"1997-98":["Arsenal","Aston Villa","Barnsley","Blackburn","Bolton","Chelsea","Coventry","Crystal Palace","Derby","Everton","Leeds","Leicester","Liverpool","Man Utd","Newcastle","Sheffield Weds","Southampton","Spurs","West Ham","Wimbledon"],"1999-00":["Arsenal","Aston Villa","Bradford","Chelsea","Coventry","Derby","Everton","Leeds","Leicester","Liverpool","Man Utd","Middlesbrough","Newcastle","Sheffield Weds","Southampton","Spurs","Sunderland","Watford","West Ham","Wimbledon"],"1998-99":["Arsenal","Aston Villa","Blackburn","Charlton","Chelsea","Coventry","Derby","Everton","Leeds","Leicester","Liverpool","Man Utd","Middlesbrough","Newcastle","Nott'm Forest","Sheffield Weds","Southampton","Spurs","West Ham","Wimbledon"],"1993-94":["Arsenal","Aston Villa","Blackburn","Chelsea","Coventry","Everton","Ipswich","Leeds","Liverpool","Man City","Man Utd","Newcastle","Norwich","Oldham","QPR","Sheffield Utd","Sheffield Weds","Southampton","Spurs","Swindon","West Ham","Wimbledon"],"1996-97":["Arsenal","Aston Villa","Blackburn","Chelsea","Coventry","Derby","Everton","Leeds","Leicester","Liverpool","Man Utd","Middlesbrough","Newcastle","Nott'm Forest","Sheffield Weds","Southampton","Spurs","Sunderland","West Ham","Wimbledon"],"1994-95":["Arsenal","Aston Villa","Blackburn","Chelsea","Coventry","Crystal Palace","Everton","Ipswich","Leeds","Leicester","Liverpool","Man City","Man Utd","Newcastle","Norwich","Nott'm Forest","QPR","Sheffield Weds","Southampton","Spurs","West Ham","Wimbledon"],"1992-93":["Arsenal","Aston Villa","Blackburn","Chelsea","Coventry","Crystal Palace","Everton","Ipswich","Leeds","Liverpool","Man City","Man Utd","Middlesbrough","Norwich","Nott'm Forest","Oldham","QPR","Sheffield Utd","Sheffield Weds","Southampton","Spurs","Wimbledon"],"1995-96":["Arsenal","Aston Villa","Blackburn","Bolton","Chelsea","Coventry","Everton","Leeds","Liverpool","Man City","Man Utd","Middlesbrough","Newcastle","Nott'm Forest","QPR","Sheffield Weds","Southampton","Spurs","West Ham","Wimbledon"]};
   var TOTAL=706;
-  var mem={};
-  var store={
-    get:async function(k){try{if(window.storage&&window.storage.get){var r=await window.storage.get(k);return r?r.value:null;}}catch(e){}try{return localStorage.getItem(k);}catch(e){}return mem[k]||null;},
-    set:async function(k,v){try{if(window.storage&&window.storage.set){await window.storage.set(k,v);return;}}catch(e){}try{localStorage.setItem(k,v);return;}catch(e){}mem[k]=v;}
-  };
-  var KEY="thirtyeight_coverage_v1";
-  var DATA={};           // "Club|Season" -> {raw, ts}
-  var seasons=Object.keys(UNIVERSE).sort();
-  var byClub={};
-  seasons.forEach(function(s){UNIVERSE[s].forEach(function(c){(byClub[c]=byClub[c]||[]).push(s);});});
-  var clubs=Object.keys(byClub).sort();
+  var DATA_URL="./380db.txt";
 
+  var CLUB={
+    "Arsenal":"Arsenal","Aston Villa":"Aston Villa","Barnsley":"Barnsley","Birmingham City":"Birmingham",
+    "Blackburn Rovers":"Blackburn","Blackpool":"Blackpool","Bolton Wanderers":"Bolton","AFC Bournemouth":"Bournemouth",
+    "Bournemouth":"Bournemouth","Bradford City":"Bradford","Brighton & Hove Albion":"Brighton","Brentford":"Brentford",
+    "Burnley":"Burnley","Cardiff City":"Cardiff","Charlton Athletic":"Charlton","Chelsea":"Chelsea",
+    "Coventry City":"Coventry","Crystal Palace":"Crystal Palace","Derby County":"Derby","Everton":"Everton",
+    "Fulham":"Fulham","Huddersfield Town":"Huddersfield","Hull City":"Hull","Ipswich Town":"Ipswich",
+    "Leeds United":"Leeds","Leicester City":"Leicester","Liverpool":"Liverpool","Luton Town":"Luton",
+    "Manchester City":"Man City","Manchester United":"Man Utd","Middlesbrough":"Middlesbrough","Newcastle United":"Newcastle",
+    "Norwich City":"Norwich","Nottingham Forest":"Nott'm Forest","Oldham Athletic":"Oldham","Portsmouth":"Portsmouth",
+    "Queens Park Rangers":"QPR","Reading":"Reading","Sheffield United":"Sheffield Utd","Sheffield Wednesday":"Sheffield Weds",
+    "Southampton":"Southampton","Stoke City":"Stoke","Sunderland":"Sunderland","Swansea City":"Swansea",
+    "Swindon Town":"Swindon","Tottenham Hotspur":"Spurs","Watford":"Watford","West Bromwich Albion":"West Brom",
+    "West Ham United":"West Ham","Wigan Athletic":"Wigan","Wimbledon":"Wimbledon","Wolverhampton Wanderers":"Wolves",
+    "West Ham":"West Ham","Tottenham":"Spurs","Sheffield Wed":"Sheffield Weds","Newcastle Utd":"Newcastle",
+    "Bradford":"Bradford","Leeds":"Leeds","Derby":"Derby","Leicester":"Leicester","Coventry":"Coventry"
+  };
+  function canonClub(name){var n=(name||"").trim();
+    if(/ FC$/.test(n))n=n.slice(0,-3).trim(); else if(/ AFC$/.test(n))n=n.slice(0,-4).trim();
+    if(n.indexOf("AFC ")===0 && CLUB[n.slice(4)])return CLUB[n.slice(4)];
+    return CLUB[n]||CLUB[(name||"").trim()]||null;}
+  var POS=["GK","CB","LB","RB","LWB","RWB","SW","CDM","DM","CM","CAM","LM","RM","LW","RW","ST","CF","SS","LF","RF"];
+  function isRating(s){return /^[3-9]\d$/.test(s);}
+  function parseScrape(text){
+    var lines=text.split(/\r?\n/).map(function(s){return s.trim();});
+    var idx=[];
+    for(var i=0;i<lines.length;i++){ if(/^\d{4}\/\d{2}$/.test(lines[i])){var j=i-1;while(j>=0&&!lines[j])j--;idx.push({i:i,club:j>=0?lines[j]:"",season:lines[i]});} }
+    var counts={};
+    for(var k=0;k<idx.length;k++){
+      var start=idx[k].i,end=(k+1<idx.length)?idx[k+1].i-1:lines.length;
+      var body=lines.slice(start+1,end);
+      var club=canonClub(idx[k].club); if(!club)continue;
+      var s=idx[k].season,season=s.slice(0,4)+"-"+s.slice(5,7);
+      var key=club+"|"+season, names={};
+      var p=0;
+      while(p<body.length){
+        if(isRating(body[p])){
+          var q=p+1;while(q<body.length&&!body[q])q++;
+          var name=q<body.length?body[q]:"";
+          var r=q+1; if(r<body.length&&body[r]&&POS.indexOf(body[r])<0)r++;
+          while(r<body.length&&POS.indexOf(body[r])>=0)r++;
+          if(name&&!isRating(name))names[name]=1;
+          p=Math.max(r,q+1);
+        } else p++;
+      }
+      counts[key]=Object.keys(names).length;
+    }
+    return counts; // {club|season: playerCount}
+  }
+
+  var DONE={};   // "club|season" -> player count
+  var seasons=Object.keys(UNIVERSE).sort();
+  var byClub={}; seasons.forEach(function(s){UNIVERSE[s].forEach(function(c){(byClub[c]=byClub[c]||[]).push(s);});});
+  var clubs=Object.keys(byClub).sort();
   var $=function(i){return document.getElementById(i);};
   function key(c,s){return c+"|"+s;}
-  function done(c,s){return !!DATA[key(c,s)];}
-
-  function fillControls(){
-    clubs.forEach(function(c){var o=document.createElement("option");o.value=c;o.textContent=c;$("club").appendChild(o);});
-    fillSeasons();
-  }
-  function fillSeasons(){
-    var c=$("club").value; $("season").innerHTML="";
-    (byClub[c]||[]).slice().sort().reverse().forEach(function(s){var o=document.createElement("option");o.value=s;o.textContent=s+(done(c,s)?"  ✓":"");$("season").appendChild(o);});
-    syncRaw();
-  }
-  function syncRaw(){var c=$("club").value,s=$("season").value,e=DATA[key(c,s)];$("raw").value=e?e.raw||"":"";}
+  function isDone(c,s){return DONE.hasOwnProperty(key(c,s));}
 
   function stats(){
-    var d=Object.keys(DATA).length;
+    var d=0,players=0;
+    seasons.forEach(function(s){UNIVERSE[s].forEach(function(c){if(isDone(c,s)){d++;players+=DONE[key(c,s)]||0;}});});
     $("doneN").textContent=d;$("missN").textContent=TOTAL-d;
-    var p=Math.round(d/TOTAL*100);$("pct").textContent=p+"%";$("barFill").style.width=p+"%";
+    $("pct").textContent=Math.round(d/TOTAL*100)+"%";$("barFill").style.width=(d/TOTAL*100)+"%";
+    $("playersN").textContent=players;
   }
-  function save(){
-    var c=$("club").value,s=$("season").value;
-    DATA[key(c,s)]={raw:$("raw").value.trim(),ts:Date.now()};
-    persist();stats();render();fillSeasons();
-    $("season").value=s;
-    msg("Sačuvano: "+c+" "+s);
-  }
-  function clearOne(){
-    var c=$("club").value,s=$("season").value;delete DATA[key(c,s)];
-    persist();stats();render();fillSeasons();$("season").value=s;msg("Obrisano: "+c+" "+s);
-  }
-  function persist(){store.set(KEY,JSON.stringify(DATA));}
-  function msg(t){$("msg").textContent=t;setTimeout(function(){if($("msg").textContent===t)$("msg").textContent="";},2500);}
-
   var view="season";
+  function chip(label,c,s){
+    var sp=document.createElement("span");
+    var dn=isDone(c,s);
+    sp.className="chip "+(dn?"done":"miss");sp.textContent=label;
+    sp.title=c+" "+s+(dn?" ("+(DONE[key(c,s)]||0)+" igraca)":" (fali)");
+    if(!dn)sp.onclick=function(){var t=c+" "+s;try{navigator.clipboard.writeText(t);}catch(e){}sp.textContent=label+" ✓kopirano";setTimeout(function(){sp.textContent=label;},1000);};
+    return sp;
+  }
+  function group(title,doneC,tot,chips){
+    var d=document.createElement("details");d.className="grp";
+    d.innerHTML='<summary>'+title+' <span class="c">'+doneC+"/"+tot+'</span></summary>';
+    var wrap=document.createElement("div");wrap.className="chips";
+    chips.forEach(function(ch){wrap.appendChild(ch);});
+    d.appendChild(wrap);d.open=doneC<tot;
+    return d;
+  }
   function render(){
     var host=$("list");host.innerHTML="";
     if(view==="season"){
       seasons.slice().reverse().forEach(function(s){
-        var miss=UNIVERSE[s].filter(function(c){return !done(c,s);});
-        host.appendChild(group(s, UNIVERSE[s].length-miss.length, UNIVERSE[s].length,
-          UNIVERSE[s].map(function(c){return chip(c, c, s);})));
+        var dc=UNIVERSE[s].filter(function(c){return isDone(c,s);}).length;
+        host.appendChild(group(s,dc,UNIVERSE[s].length,UNIVERSE[s].map(function(c){return chip(c,c,s);})));
       });
     } else if(view==="club"){
       clubs.forEach(function(c){
         var ss=byClub[c].slice().sort();
-        var miss=ss.filter(function(s){return !done(c,s);});
-        host.appendChild(group(c, ss.length-miss.length, ss.length,
-          ss.reverse().map(function(s){return chip(s, c, s);})));
+        var dc=ss.filter(function(s){return isDone(c,s);}).length;
+        host.appendChild(group(c,dc,ss.length,ss.slice().reverse().map(function(s){return chip(s,c,s);})));
       });
     } else {
-      var miss=[];
-      seasons.forEach(function(s){UNIVERSE[s].forEach(function(c){if(!done(c,s))miss.push(c+" "+s);});});
+      var miss=[];seasons.forEach(function(s){UNIVERSE[s].forEach(function(c){if(!isDone(c,s))miss.push([c,s]);});});
       var d=document.createElement("div");d.className="grp";
-      d.innerHTML='<summary>Sve što fali <span class="c">'+miss.length+'</span></summary>';
+      d.innerHTML='<summary>Sve sto fali <span class="c">'+miss.length+'</span></summary>';
       var wrap=document.createElement("div");wrap.className="chips";
-      miss.forEach(function(cs){var sp=document.createElement("span");sp.className="chip miss";sp.textContent=cs;wrap.appendChild(sp);});
-      if(!miss.length)wrap.innerHTML='<div class="alldone">Sve uneto. 🎉</div>';
-      d.appendChild(wrap);d.open=true;host.appendChild(d);
+      miss.forEach(function(cs){wrap.appendChild(chip(cs[0]+" "+cs[1],cs[0],cs[1]));});
+      if(!miss.length)wrap.innerHTML='<div class="alldone">Sve uneto. </div>';
+      d.appendChild(wrap);host.appendChild(d);
     }
   }
-  function group(title,doneC,tot,chips){
-    var d=document.createElement("details");d.className="grp";
-    var allDone=doneC===tot;
-    d.innerHTML='<summary>'+title+' <span class="c">'+doneC+"/"+tot+'</span></summary>';
-    var wrap=document.createElement("div");wrap.className="chips";
-    chips.forEach(function(ch){wrap.appendChild(ch);});
-    d.appendChild(wrap);d.open=!allDone && doneC>0 ? true : (doneC<tot);
-    if(allDone){d.open=false;}
-    return d;
-  }
-  function chip(label,c,s){
-    var sp=document.createElement("span");
-    sp.className="chip "+(done(c,s)?"done":"miss");sp.textContent=label;
-    sp.title=c+" "+s+(done(c,s)?" (uneto, klik da otvoriš)":" (fali, klik da izabereš)");
-    sp.onclick=function(){$("club").value=c;fillSeasons();$("season").value=s;syncRaw();window.scrollTo({top:0,behavior:"smooth"});};
-    return sp;
-  }
+  function tabs(on){["tSeason","tClub","tMiss"].forEach(function(i){$(i).classList.remove("on");});on.classList.add("on");}
+  function apply(text,src){DONE=parseScrape(text||"");stats();render();$("srcNote").textContent=src;}
 
-  function exportJSON(){
-    var payload={universe_total:TOTAL,entered:Object.keys(DATA).length,data:DATA};
-    var blob=new Blob([JSON.stringify(payload,null,1)],{type:"application/json"});
-    var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="coverage_38-0.json";a.click();
+  function load(){
+    $("srcNote").textContent="ucitavam...";
+    fetch(DATA_URL+"?v="+Date.now(),{cache:"no-store"}).then(function(r){
+      if(!r.ok)throw new Error(r.status);return r.text();
+    }).then(function(t){apply(t,"iz 380db.txt ("+new Date().toLocaleTimeString()+")");})
+    .catch(function(){$("srcNote").textContent="ne mogu da ucitam 380db.txt (otvori fajl rucno ako radis lokalno)";stats();render();});
   }
-  function importJSON(file){
-    var rd=new FileReader();rd.onload=function(){try{var o=JSON.parse(rd.result);DATA=o.data||o;persist();stats();render();fillSeasons();msg("Uvezeno.");}catch(e){msg("Neispravan JSON.");}};rd.readAsText(file);
-  }
-
-  $("club").addEventListener("change",fillSeasons);
-  $("season").addEventListener("change",syncRaw);
-  $("save").addEventListener("click",save);
-  $("clear").addEventListener("click",clearOne);
-  $("export").addEventListener("click",exportJSON);
-  $("imp").addEventListener("change",function(e){if(e.target.files[0])importJSON(e.target.files[0]);});
+  $("refresh").addEventListener("click",load);
+  $("fileInput").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){apply(rd.result,"iz lokalnog fajla");};rd.readAsText(f);});
   $("tSeason").addEventListener("click",function(){view="season";tabs(this);render();});
   $("tClub").addEventListener("click",function(){view="club";tabs(this);render();});
-  $("tAll").addEventListener("click",function(){view="all";tabs(this);render();});
-  function tabs(on){["tSeason","tClub","tAll"].forEach(function(i){$(i).classList.remove("on");});on.classList.add("on");}
-
-  (async function(){
-    var saved=await store.get(KEY);
-    if(saved){try{DATA=JSON.parse(saved)||{};}catch(e){DATA={};}}
-    fillControls();stats();render();
-  })();
+  $("tMiss").addEventListener("click",function(){view="miss";tabs(this);render();});
+  stats();render();load();
 })();
 </script>
 </body>
