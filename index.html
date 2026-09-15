@@ -49,7 +49,11 @@
     font-variant-numeric:tabular-nums;text-align:right;width:34px;font-weight:700}
   tbody td:last-child{border-right:1px solid var(--line);border-radius:0 10px 10px 0}
   td.player{font-weight:650}
-  td.pos{color:var(--accent);font-weight:700;font-size:12.5px;text-align:center;width:52px}
+  td.pos{font-weight:700;font-size:12.5px;text-align:center;width:52px}
+  .p-GK{color:#f3c34a}
+  .p-DEF{color:#5ba7c4}
+  .p-MID{color:#63c583}
+  .p-FWD{color:#ea6a52}
   td.num{text-align:center;width:64px}
   .r{font-weight:800;font-variant-numeric:tabular-nums;border-radius:7px;padding:5px 0;display:inline-block;
     min-width:42px;border:1px solid var(--line);background:#0c1611;font-size:15px}
@@ -270,7 +274,7 @@
       +'<th class="num sortable'+(sortKey==="primeRating"?" active":"")+'" data-k="primeRating">Prime'+(sortKey==="primeRating"?" "+arrow:"")+'</th></tr></thead>';
     var body="<tbody>";
     pool.forEach(function(d,i){
-      body+='<tr><td>'+(i+1)+'</td><td class="player">'+esc(d.player)+'</td><td class="pos">'+esc(d.position)+'</td>'
+      body+='<tr><td>'+(i+1)+'</td><td class="player">'+esc(d.player)+'</td><td class="pos p-'+d.position+'">'+esc(d.position)+'</td>'
         +'<td class="num"><span class="r '+tier(d.seasonRating)+'">'+d.seasonRating+'</span></td>'
         +'<td class="num"><span class="r '+tier(d.primeRating)+'">'+d.primeRating+'</span></td></tr>';
     });
