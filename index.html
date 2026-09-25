@@ -233,9 +233,9 @@
     ps.forEach(function(p){if(POSAVG[p]!=null&&POSAVG[p]<m)m=POSAVG[p];});
     return m===1e9?999:m;
   }
-  function orderedPositions(d){ // player's precise positions, in the top strip's order (desc avg)
+  function orderedPositions(d){ // player's precise positions, rarest first (ascending avg)
     var ps=(d.positions&&d.positions.length?d.positions:[]).slice();
-    return ps.sort(function(a,b){return (POSAVG[b]||0)-(POSAVG[a]||0);});
+    return ps.sort(function(a,b){return (POSAVG[a]||0)-(POSAVG[b]||0);});
   }
   function renderPosBar(){
     var host=$("posbar");
